@@ -1,15 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class LaunchScreen extends StatefulWidget {
+class LaunchScreen extends StatelessWidget {
   const LaunchScreen({super.key});
 
   @override
-  State<LaunchScreen> createState() => _LaunchScreenState();
-}
-
-class _LaunchScreenState extends State<LaunchScreen> {
-  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.secondary,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(height: 40),
+                Column(
+                  children: [
+                    Hero(
+                      tag: 'app_logo',
+                      child: Icon(
+                        Icons.favorite,
+                        size: 80,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Let\'s start your\nhealth journey today!',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () => context.go('/signup'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 56),
+                  ),
+                  child: Text(
+                    'Get Started',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
