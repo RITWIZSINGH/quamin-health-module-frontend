@@ -38,17 +38,19 @@ class LaunchScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     Text(
                       'Let\'s start your\nhealth journey today!',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () => context.go('/signup'),
                   style: ElevatedButton.styleFrom(
+                    overlayColor: Colors.grey,
                     backgroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 56),
                   ),
