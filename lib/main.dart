@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:health_tracker/routes/router.dart';
+import 'package:quamin_health_module/routes/router.dart';
 import 'package:quamin_health_module/theme/app_theme.dart';
 
 void main() {
