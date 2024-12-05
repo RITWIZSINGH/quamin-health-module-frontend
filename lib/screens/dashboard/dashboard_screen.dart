@@ -24,7 +24,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child: _tabs[_currentIndex],
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.05, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        child: KeyedSubtree(
+          key: ValueKey(_currentIndex),
+          child: _tabs[_currentIndex],
+        ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
@@ -33,6 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _currentIndex = index;
           });
         },
+        animationDuration: const Duration(milliseconds: 400),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
