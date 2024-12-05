@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Health Tracker',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.lightTheme, 
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );
