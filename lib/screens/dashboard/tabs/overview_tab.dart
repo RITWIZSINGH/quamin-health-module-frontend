@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:quamin_health_module/screens/dashboard/all_health_data_screen.dart';
 
 class OverviewTab extends StatelessWidget {
   const OverviewTab({super.key});
@@ -80,7 +81,13 @@ class OverviewTab extends StatelessWidget {
                               ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AllHealthDataScreen()));
+                      },
                       child: Row(
                         children: [
                           const Text('All Data'),
