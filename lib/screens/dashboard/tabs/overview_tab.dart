@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:quamin_health_module/routes/custom_page_route.dart';
 import 'package:quamin_health_module/screens/dashboard/all_health_data_screen.dart';
 
 class OverviewTab extends StatelessWidget {
@@ -84,9 +85,8 @@ class OverviewTab extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const AllHealthDataScreen()));
+                            CustomPageRoute(
+                                child: const AllHealthDataScreen()));
                       },
                       child: Row(
                         children: [
@@ -140,7 +140,7 @@ class OverviewTab extends StatelessWidget {
   // Blog card widget
   Widget _buildBlogCard(BuildContext context, double sw, double sh, int index) {
     return Container(
-      width: sw / 1.5,
+      width: sw / 1.4,
       margin: EdgeInsets.only(right: sw / 30),
       decoration: BoxDecoration(
         color: Colors.white,
