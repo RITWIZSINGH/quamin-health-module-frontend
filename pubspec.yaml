@@ -37,6 +37,9 @@ dependencies:
   google_fonts: ^6.2.1
   go_router: ^14.6.2
   flutter_svg: ^2.0.16
+  fl_chart: ^0.69.2
+  charts_flutter: ^0.12.0
+  vector_math: ^2.1.4
 
 dev_dependencies:
   flutter_test:
