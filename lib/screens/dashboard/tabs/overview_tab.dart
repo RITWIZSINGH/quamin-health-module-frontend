@@ -7,41 +7,203 @@ class OverviewTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double sw = MediaQuery.of(context).size.width;
+    double sh = MediaQuery.of(context).size.height;
+
     return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(sw / 25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '☀ TUES 11 JUL',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Text(
-                    'Overview',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-              const CircleAvatar(
-                backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100&h=100',
-                ),
-              ),
+              _buildHeaderSection(context, sw, sh),
+              SizedBox(height: sh / 30),
+              _buildHealthScore(context),
+              SizedBox(height: sh / 30),
+              _buildHighlights(context),
+              SizedBox(height: sh / 30),
+              _buildWeeklyReport(context),
+              SizedBox(height: sh / 30),
+              _buildBlogsSection(context),
             ],
           ),
-          const SizedBox(height: 24),
-          _buildHealthScore(context),
-          const SizedBox(height: 24),
-          _buildHighlights(context),
-          const SizedBox(height: 24),
-          _buildWeeklyReport(context),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderSection(BuildContext context, double sw, double sh) {
+    return SizedBox(
+      width: sw,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      radius: sw / 20,
+                      backgroundColor: Colors.white,
+                      child: Padding(
+                        padding: EdgeInsets.all(sw / 50),
+                        child: Image.asset(
+                          "assets/logo/logo.png",
+                        ),
+                      ),
+                    ),
+                    CircleAvatar(
+                      radius: sw / 20,
+                      backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100&h=100',
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: sh / 100),
+                Text(
+                  '☀ TUES 11 JUL',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Overview',
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Row(
+                        children: [
+                          const Text('All Data'),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: sw / 30,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBlogsSection(BuildContext context) {
+    double sw = MediaQuery.of(context).size.width;
+    double sh = MediaQuery.of(context).size.height;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Latest Blogs',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+        ),
+        SizedBox(height: sh / 50),
+        SizedBox(
+          height: sh / 3,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5, // Replace with actual number of blogs
+            itemBuilder: (context, index) {
+              return _buildBlogCard(context, sw, sh, index);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Blog card widget
+  Widget _buildBlogCard(BuildContext context, double sw, double sh, int index) {
+    return Container(
+      width: sw / 1.5,
+      margin: EdgeInsets.only(right: sw / 30),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize:
+            MainAxisSize.min, // Add this to minimize the column's height
+        children: [
+          Container(
+            height: sh / 5.5,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black26, blurRadius: 8, offset: Offset(0, 4))
+              ],
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                'Blog Image ${index + 1}',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(sw / 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize:
+                  MainAxisSize.min, // Add this to minimize the column's height
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Blog Title ${index + 1}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('Read More >'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: sh / 180),
+                Text(
+                  'Short description of the blog post goes here...',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -51,6 +213,13 @@ class OverviewTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, 6),
+          )
+        ],
         color: Theme.of(context)
             .colorScheme
             .primaryContainer
@@ -189,6 +358,13 @@ class OverviewTab extends StatelessWidget {
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: color,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black45,
+            blurRadius: 10,
+            offset: Offset(0, 6),
+          )
+        ],
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -324,7 +500,10 @@ class OverviewTab extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Colors.black, blurRadius: 1, blurStyle: BlurStyle.normal)
+              color: Colors.black45,
+              blurRadius: 8,
+              blurStyle: BlurStyle.normal,
+              offset: Offset(0, 4))
         ],
         borderRadius: BorderRadius.circular(16),
       ),
@@ -372,9 +551,15 @@ class OverviewTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black45,
+              blurRadius: 10,
+              offset: Offset(0, 6),
+            )
+          ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

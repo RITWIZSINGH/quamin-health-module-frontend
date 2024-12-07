@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:quamin_health_module/screens/launch_screen.dart';
-import 'package:quamin_health_module/screens/signup_screen.dart';
+import 'package:quamin_health_module/screens/signin_screen.dart';
 import 'package:quamin_health_module/screens/dashboard/dashboard_screen.dart';
 
 final router = GoRouter(
@@ -8,7 +8,7 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const LaunchScreen(),
+      builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
       path: '/signup',
