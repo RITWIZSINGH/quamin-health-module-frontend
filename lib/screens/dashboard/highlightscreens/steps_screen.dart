@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '/widgets/progress_ring.dart';
-import '/widgets/stat_card.dart';
-import '/widgets/activity_chart.dart';
-import '/widgets/time_period_selector.dart';
+import '../../../widgets/step_screen_widgets/progress_ring.dart';
+import '../../../widgets/step_screen_widgets/stat_card.dart';
+import '../../../widgets/step_screen_widgets/activity_chart.dart';
+import '../../../widgets/step_screen_widgets/time_period_selector.dart';
 
 class StepsScreen extends StatelessWidget {
   const StepsScreen({super.key});

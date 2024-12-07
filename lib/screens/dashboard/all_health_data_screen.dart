@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '/widgets/health_data_item.dart';
+import 'package:quamin_health_module/routes/custom_page_route.dart';
+import '../../widgets/all_healthData_widgets/health_data_item.dart';
 import 'highlightscreens/cycle_tracking_screen.dart';
 import 'highlightscreens/nutrition_screen.dart';
 import 'highlightscreens/sleep_screen.dart';
@@ -43,7 +44,7 @@ class AllHealthDataScreen extends StatelessWidget {
             value: '11,875 steps',
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const StepsScreen()),
+              CustomPageRoute(child: const StepsScreen()),
             ),
           ),
           HealthDataItem(
@@ -53,7 +54,7 @@ class AllHealthDataScreen extends StatelessWidget {
             value: '08 April',
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const CycleTrackingScreen()),
+              CustomPageRoute(child: const CycleTrackingScreen()),
             ),
           ),
           HealthDataItem(
@@ -63,7 +64,7 @@ class AllHealthDataScreen extends StatelessWidget {
             value: '7 hr 31 min',
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const SleepScreen()),
+              CustomPageRoute(child: const SleepScreen()),
             ),
           ),
           HealthDataItem(
@@ -80,7 +81,7 @@ class AllHealthDataScreen extends StatelessWidget {
             value: '850 kcal',
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const NutritionScreen()),
+              CustomPageRoute(child: const NutritionScreen()),
             ),
           ),
           HealthDataItem(
