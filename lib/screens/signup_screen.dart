@@ -219,19 +219,19 @@ class SignupScreen extends StatelessWidget {
                     children: [
                       _SocialLoginButton(
                         onPressed: () {},
-                        assetName: 'images/google.svg',
+                        assetName: 'assets/images/google.svg',
                         backgroundColor: Colors.white,
                       ),
                       const SizedBox(width: 20),
                       _SocialLoginButton(
                         onPressed: () {},
-                        assetName: 'images/facebook.svg',
+                        assetName: 'assets/images/facebook.svg',
                         backgroundColor: const Color(0xFF1877F2),
                       ),
                       const SizedBox(width: 20),
                       _SocialLoginButton(
                         onPressed: () {},
-                        assetName: 'images/apple.svg',
+                        assetName: 'assets/images/apple.svg',
                         backgroundColor: Colors.black,
                       ),
                     ],
