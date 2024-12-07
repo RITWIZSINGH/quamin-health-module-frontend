@@ -162,7 +162,7 @@ class GradientCurvedOverlayPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final path = Path()
-      ..moveTo(0, size.height * 0.45)
+      ..moveTo(0, size.height * 0.4)
       ..quadraticBezierTo(
         size.width * 0.75,
         size.height * 0.65,

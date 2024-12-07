@@ -20,10 +20,15 @@ class SignupScreen extends StatelessWidget {
                   children: [
                     Hero(
                       tag: 'app_logo',
-                      child: Icon(
-                        Icons.favorite,
-                        size: 48,
-                        color: Theme.of(context).colorScheme.primary,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            "assets/logo/logo.png",
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -75,10 +80,10 @@ class SignupScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       TextField(
                         decoration: InputDecoration(
-                          labelText: 'Enter Email',
-                          labelStyle: TextStyle(color: Colors.grey.shade500),
+                          hintText: 'Enter Email',
+                          hintStyle: TextStyle(color: Colors.grey.shade500),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           fillColor: Colors.grey.shade200,
                           filled: true,
@@ -115,10 +120,10 @@ class SignupScreen extends StatelessWidget {
                       TextField(
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: 'Enter Password',
-                          labelStyle: TextStyle(color: Colors.grey.shade500),
+                          hintText: 'Enter Password',
+                          hintStyle: TextStyle(color: Colors.grey.shade500),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           fillColor: Colors.grey.shade200,
                           filled: true,
@@ -150,7 +155,7 @@ class SignupScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 15),
                 TweenAnimationBuilder<double>(
                   duration: const Duration(milliseconds: 1200),
                   tween: Tween(begin: 0.0, end: 1.0),
@@ -182,7 +187,7 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 38),
+                const SizedBox(height: 24),
                 TweenAnimationBuilder<double>(
                   duration: const Duration(milliseconds: 1300),
                   tween: Tween(begin: 0.0, end: 1.0),
@@ -237,7 +242,7 @@ class SignupScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 58),
                 TweenAnimationBuilder<double>(
                   duration: const Duration(milliseconds: 1500),
                   tween: Tween(begin: 0.0, end: 1.0),
