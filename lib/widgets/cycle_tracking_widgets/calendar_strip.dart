@@ -8,7 +8,7 @@ class CalendarStrip extends StatelessWidget {
     return SizedBox(
       height: 80,
       child: ListView(
-        scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.horizontal, 
         children: [
           _buildDay('M', '06', false),
           _buildDay('T', '07', false),

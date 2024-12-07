@@ -236,7 +236,10 @@ class OverviewTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Health Score'),
+          const Text(
+            'Health Score',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           Row(
             children: [
