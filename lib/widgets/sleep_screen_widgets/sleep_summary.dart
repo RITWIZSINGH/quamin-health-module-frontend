@@ -26,7 +26,7 @@ class SleepSummary extends StatelessWidget {
                   TextSpan(
                     text: '7h 31min',
                     style: TextStyle(
-                      color: Colors.blue[400],
+                      color: Color(0xFF7570EA),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

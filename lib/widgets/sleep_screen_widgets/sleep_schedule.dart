@@ -31,7 +31,7 @@ class SleepSchedule extends StatelessWidget {
                 'Bedtime',
                 '22:00',
                 'pm',
-                Colors.orange[200]!,
+                Color(0XFFEA916E),
               ),
             ),
             const SizedBox(width: 16),
@@ -40,7 +40,7 @@ class SleepSchedule extends StatelessWidget {
                 'Wake up',
                 '07:30',
                 'am',
-                Colors.blue[400]!,
+                Color(0XFF7F55E0),
               ),
             ),
           ],
@@ -49,8 +49,7 @@ class SleepSchedule extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeCard(
-      String label, String time, String period, Color color) {
+  Widget _buildTimeCard(String label, String time, String period, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
