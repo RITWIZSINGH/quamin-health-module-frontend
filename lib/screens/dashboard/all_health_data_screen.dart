@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quamin_health_module/routes/custom_page_route.dart';
 import '../../widgets/all_healthData_widgets/health_data_item.dart';
 import 'highlightscreens/cycle_tracking_screen.dart';
-import 'highlightscreens/nutrition_screen.dart';
+import 'highlightscreens/nutrition_tracker_screens/nutrition_screen.dart';
 import 'highlightscreens/sleep_screen.dart';
 import 'highlightscreens/steps_screen.dart';
 
