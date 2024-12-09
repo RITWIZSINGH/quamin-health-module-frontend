@@ -1,9 +1,53 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> _handleGoogleSignIn(BuildContext context) async {
+    try {
+      // Trigger the Google Sign In process
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return;
+
+      // Obtain auth details from the request
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the credential
+      final UserCredential userCredential = 
+          await _auth.signInWithCredential(credential);
+          
+      // Navigate to home page after successful sign in
+      if (userCredential.user != null) {
+        context.go('/dashboard');
+      }
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to sign in with Google: $e")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +267,9 @@ class SignupScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _SocialLoginButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleGoogleSignIn(context);
+                        },
                         assetName: 'assets/images/google.svg',
                         backgroundColor: Colors.white,
                       ),

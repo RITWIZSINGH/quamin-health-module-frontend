@@ -12,7 +12,20 @@
           "package_name": "com.example.quamin_health_module"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "225924218843-i6uv6bqnsjto8op56p680if11uq4itau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quamin_health_module",
+            "certificate_hash": "6a7af9f8288ffbfc83c8c81eb9fd6640da7a7b0d"
+          }
+        },
+        {
+          "client_id": "225924218843-ioj0mb8vg8b9gm3qc3ptnvpf2vbdie43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAaauBxWLTXLmCCFJMlFF5srQiK1cZoDW0"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225924218843-ioj0mb8vg8b9gm3qc3ptnvpf2vbdie43.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "225924218843-trga0flhso0ui6astotjfjt7r7evgrna.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quaminHealthModule"
+              }
+            }
+          ]
         }
       }
     }

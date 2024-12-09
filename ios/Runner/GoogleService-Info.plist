@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>225924218843-trga0flhso0ui6astotjfjt7r7evgrna.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.225924218843-trga0flhso0ui6astotjfjt7r7evgrna</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>225924218843-i6uv6bqnsjto8op56p680if11uq4itau.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAxmNawym4DUsPD7eCHSJdIXR4f6acfciM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>225924218843</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.quaminHealthModule</string>
+	<key>PROJECT_ID</key>
+	<string>quamin-health-module</string>
+	<key>STORAGE_BUCKET</key>
+	<string>quamin-health-module.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:225924218843:ios:85c3c05d2b38fd7bd531fe</string>
+</dict>
+</plist>
