@@ -13,7 +13,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (e) {
-    print('Firebase initialization error: $e');
+    print('Firebase initialization error: $e'); 
   }
   runApp(const MyApp());
 }

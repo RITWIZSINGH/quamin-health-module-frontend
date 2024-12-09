@@ -37,6 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
       final UserCredential userCredential = 
           await _auth.signInWithCredential(credential);
           
+          
       // Navigate to home page after successful sign in
       if (userCredential.user != null) {
         context.go('/dashboard');
