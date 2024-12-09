@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'quamin-health-module.firebasestorage.app',
     measurementId: 'G-PBNRK8GR5X',
   );
+
 }
