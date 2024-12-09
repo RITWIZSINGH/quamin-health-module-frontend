@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225924218843",
+    "project_id": "quamin-health-module",
+    "storage_bucket": "quamin-health-module.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225924218843:android:5088d4d68e005980d531fe",
+        "android_client_info": {
+          "package_name": "com.example.quamin_health_module"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaauBxWLTXLmCCFJMlFF5srQiK1cZoDW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
