@@ -16,7 +16,7 @@ class _TimePeriodSelectorState extends State<TimePeriodSelector> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.blue[100],
+        color: Color(0xff636ae8),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Row(
@@ -31,14 +31,16 @@ class _TimePeriodSelectorState extends State<TimePeriodSelector> {
                 vertical: 8,
               ),
               decoration: BoxDecoration(
-                color: selectedIndex == index ? Colors.white : Colors.transparent,
+                color:
+                    selectedIndex == index ? Colors.white : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 periods[index],
                 style: TextStyle(
-                  color: selectedIndex == index ? Colors.blue : Colors.black,
-                  fontWeight: FontWeight.w500,
+                  color:
+                      selectedIndex == index ? Color(0xff636ae8) : Colors.white,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
             ),

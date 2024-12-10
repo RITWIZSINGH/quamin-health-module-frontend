@@ -1,5 +1,9 @@
+// ignore_for_file: avoid_single_cascade_in_expression_statements
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:lucide_icons/lucide_icons.dart';
 
 class ProgressRing extends StatelessWidget {
   final double progress;
@@ -25,9 +29,9 @@ class ProgressRing extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                Icons.directions_walk,
-                color: Colors.blue,
-                size: 24,
+                LucideIcons.footprints,
+                color: Color(0xff636ae8),
+                size: 26,
               ),
               Text(
                 steps.toString(),
@@ -62,7 +66,8 @@ class ProgressRingPainter extends CustomPainter {
     final radius = math.min(size.width / 2, size.height / 2) - 10;
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 15.0;
+      ..strokeWidth = 18.0
+      ..strokeCap = StrokeCap.round;
 
     // Draw background ring
     paint.color = Colors.grey[200]!;
@@ -75,7 +80,7 @@ class ProgressRingPainter extends CustomPainter {
     );
 
     // Draw progress ring
-    paint.color = Colors.blue;
+    paint.color = Color(0xFF636AE8);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -math.pi / 2,

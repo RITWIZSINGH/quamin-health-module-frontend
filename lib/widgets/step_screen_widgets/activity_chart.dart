@@ -7,10 +7,10 @@ class ActivityChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 220,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.blue[100],
+        color: Color(0xff878ced),
         borderRadius: BorderRadius.circular(16),
       ),
       child: LineChart(
@@ -21,14 +21,22 @@ class ActivityChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
-                  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                  const days = [
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
+                    'Sat',
+                    'Sun'
+                  ];
                   if (value >= 0 && value < days.length) {
                     return Text(
                       days[value.toInt()],
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
                     );
                   }
                   return const Text('');

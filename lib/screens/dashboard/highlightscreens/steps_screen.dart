@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../widgets/step_screen_widgets/progress_ring.dart';
 import '../../../widgets/step_screen_widgets/stat_card.dart';
 import '../../../widgets/step_screen_widgets/activity_chart.dart';
@@ -36,7 +37,7 @@ class StepsScreen extends StatelessWidget {
                       text: '80% ',
                       style: TextStyle(
                         fontSize: 24,
-                        color: Colors.blue[400],
+                        color: Color(0xff636ae8),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -65,18 +66,21 @@ class StepsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   StatCard(
+                    icon: LucideIcons.flame,
                     value: '850',
                     unit: 'kcal',
                     color: Colors.purple,
                     progress: 0.7,
                   ),
                   StatCard(
+                    icon: LucideIcons.mapPin,
                     value: '5',
                     unit: 'km',
                     color: Colors.orange,
                     progress: 0.5,
                   ),
                   StatCard(
+                    icon: LucideIcons.clock,
                     value: '120',
                     unit: 'min',
                     color: Colors.blue,
@@ -84,11 +88,15 @@ class StepsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              const TimePeriodSelector(),
-              const SizedBox(height: 20),
-              const ActivityChart(),
-              const SizedBox(height: 20),
+              Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const TimePeriodSelector(),
+                  const SizedBox(height: 20),
+                  const ActivityChart(),
+                  const SizedBox(height: 20),
+                ],
+              )
             ],
           ),
         ),
