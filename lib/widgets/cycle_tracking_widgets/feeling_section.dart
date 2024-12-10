@@ -19,31 +19,31 @@ class FeelingSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildFeelingOption(
-              Icons.edit_note,
-              'Share your\nsymtoms with us',
-            ),
-            _buildFeelingOption(
-              Icons.insights,
-              'Here\'s your daily\ninsights',
-            ),
+            _buildFeelingOption(Icons.edit_note, 'Share your\nsymtoms with us',
+                Color(0xff9f85ec)),
+            _buildFeelingOption(Icons.insights, 'Here\'s your daily\ninsights',
+                Color(0xffe96992)),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildFeelingOption(IconData icon, String text) {
+  Widget _buildFeelingOption(IconData icon, String text, Color color) {
     return Container(
       width: 150,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: Colors.grey[50],
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
-          Icon(icon, size: 32, color: Colors.blue[400]),
+          CircleAvatar(
+            child: Icon(icon, size: 32, color: color),
+            radius: 28,
+            backgroundColor: color.withValues(alpha: 0.2),
+          ),
           const SizedBox(height: 8),
           Text(
             text,

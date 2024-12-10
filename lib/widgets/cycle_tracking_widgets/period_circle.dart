@@ -35,9 +35,7 @@ class PeriodCircle extends StatelessWidget {
           const Text(
             'Low chance of getting pregnant',
             style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
+                color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -46,14 +44,16 @@ class PeriodCircle extends StatelessWidget {
               backgroundColor: Colors.white,
               foregroundColor: Color(0xFF878CED),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(38),
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 1),
               child: const Text(
                 'Edit period dates',
-                style: TextStyle(color: Colors.black),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
           ),
