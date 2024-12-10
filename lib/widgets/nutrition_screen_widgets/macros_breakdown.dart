@@ -15,20 +15,30 @@ class MacrosBreakdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildMacroRow('Fat', '${(fatPercentage * 65).toStringAsFixed(1)}g', 
-          '${(fatPercentage * 100).toStringAsFixed(0)}%', Colors.blue[400]!),
-        const SizedBox(height: 16),
-        _buildMacroRow('Protein', '${(proteinPercentage * 50).toStringAsFixed(1)}g',
-          '${(proteinPercentage * 100).toStringAsFixed(0)}%', Colors.orange[300]!),
-        const SizedBox(height: 16),
-        _buildMacroRow('Carbs', '${(carbsPercentage * 300).toStringAsFixed(1)}g',
-          '${(carbsPercentage * 100).toStringAsFixed(0)}%', Colors.blue[200]!),
+        const SizedBox(height: 32),
+        _buildMacroRow('Fat', '${(fatPercentage * 65).toStringAsFixed(1)}g',
+            '${(fatPercentage * 100).toStringAsFixed(0)}%', Color(0xff878ced)),
+        const SizedBox(height: 26),
+        _buildMacroRow(
+            'Protein',
+            '${(proteinPercentage * 50).toStringAsFixed(1)}g',
+            '${(proteinPercentage * 100).toStringAsFixed(0)}%',
+            Color(0xffefa98d)),
+        const SizedBox(height: 26),
+        _buildMacroRow(
+            'Carbs',
+            '${(carbsPercentage * 300).toStringAsFixed(1)}g',
+            '${(carbsPercentage * 100).toStringAsFixed(0)}%',
+            Color(0xff9d7ee7)),
+        const SizedBox(height: 28),
       ],
     );
   }
 
-  Widget _buildMacroRow(String name, String grams, String percentage, Color color) {
+  Widget _buildMacroRow(
+      String name, String grams, String percentage, Color color) {
     return Row(
       children: [
         Container(

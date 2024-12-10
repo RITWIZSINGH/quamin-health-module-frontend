@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class NutritionChart extends StatelessWidget {
   final double fatPercentage;
@@ -15,26 +16,27 @@ class NutritionChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 200, // Increased height to accommodate more space
       child: CustomPaint(
         painter: NutritionRingPainter(
           fatPercentage: fatPercentage,
           proteinPercentage: proteinPercentage,
           carbsPercentage: carbsPercentage,
         ),
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              // SizedBox(height: 10), // Added space above the text
+              Text(
                 '60%',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8), // Added spacing
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 'of 1300 kcal',
                 style: TextStyle(
                   color: Colors.black54,
@@ -63,62 +65,67 @@ class NutritionRingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width * 0.35;
-    final strokeWidth = 20.0;
+    final radius = size.width * 0.375;
 
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round; // Added rounded ends
+      ..strokeWidth = 20.0
+      ..strokeCap = StrokeCap.round;
 
-    // Background rings
+    _drawBackgroundRings(canvas, center, radius, paint);
+    _drawProgressRings(canvas, center, radius, paint);
+  }
+
+  void _drawBackgroundRings(
+      Canvas canvas, Offset center, double radius, Paint paint) {
     paint.color = Colors.grey[200]!;
+
+    for (int i = 0; i < 3; i++) {
+      final currentRadius = radius - (20.0 + 5.0) * i;
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: currentRadius),
+        -1.57,
+        2 * pi,
+        false,
+        paint,
+      );
+    }
+  }
+
+  void _drawProgressRings(
+      Canvas canvas, Offset center, double radius, Paint paint) {
+    // Fat ring
+    paint.color = const Color(0xff878ced);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -1.57,
-      6.28,
-      false,
-      paint,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - strokeWidth - 5),
-      -1.57,
-      6.28,
-      false,
-      paint,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - (strokeWidth + 5) * 2),
-      -1.57,
-      6.28,
+      2 * pi * fatPercentage,
       false,
       paint,
     );
 
-    // Progress rings
-    paint.color = Colors.blue[400]!;
+    // Protein ring
+    paint.color = const Color(0xffefa98d);
     canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
+      Rect.fromCircle(
+        center: center,
+        radius: radius - 20.0 - 5.0,
+      ),
       -1.57,
-      6.28 * fatPercentage,
+      2 * pi * proteinPercentage,
       false,
       paint,
     );
 
-    paint.color = Colors.orange[300]!;
+    // Carbs ring
+    paint.color = const Color(0xff9d7ee7);
     canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - strokeWidth - 5),
+      Rect.fromCircle(
+        center: center,
+        radius: radius - (20.0 + 5.0) * 2,
+      ),
       -1.57,
-      6.28 * proteinPercentage,
-      false,
-      paint,
-    );
-
-    paint.color = Colors.blue[200]!;
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - (strokeWidth + 5) * 2),
-      -1.57,
-      6.28 * carbsPercentage,
+      2 * pi * carbsPercentage,
       false,
       paint,
     );

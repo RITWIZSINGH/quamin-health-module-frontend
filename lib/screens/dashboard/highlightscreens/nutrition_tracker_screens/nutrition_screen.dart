@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '/widgets/nutrition_screen_widgets/calorie_summary.dart';
 import '/widgets/nutrition_screen_widgets/nutrition_chart.dart';
 import '/widgets/nutrition_screen_widgets/macros_breakdown.dart';
@@ -47,7 +48,7 @@ class NutritionScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   PrimaryButton(
                     text: 'Add meals',
-                    icon: Icons.add,
+                    icon: LucideIcons.soup,
                     onPressed: () {
                       Navigator.push(
                         context,

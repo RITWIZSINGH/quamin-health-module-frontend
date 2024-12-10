@@ -29,7 +29,7 @@ class CalorieSummary extends StatelessWidget {
                     TextSpan(
                       text: '960 kcal ',
                       style: TextStyle(
-                        color: Colors.blue[400],
+                        color: Color(0xff878ced),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
