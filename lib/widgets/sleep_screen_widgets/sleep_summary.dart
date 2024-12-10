@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import '../../models/sleep_data.dart';
 
 class SleepSummary extends StatelessWidget {
-  const SleepSummary({super.key});
+  final SleepData data;
+
+  const SleepSummary({
+    super.key,
+    required this.data,
+  });
+
+  String _formatDuration(double hours) {
+    final totalMinutes = (hours * 60).round();
+    final h = totalMinutes ~/ 60;
+    final m = totalMinutes % 60;
+    return '${h}h ${m}min';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +37,9 @@ class SleepSummary extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   TextSpan(
-                    text: '7h 31min',
-                    style: TextStyle(
-                      color: Color(0xFF7570EA),
+                    text: _formatDuration(data.hours),
+                    style: const TextStyle(
+                      color: Color(0xFF888CEF),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

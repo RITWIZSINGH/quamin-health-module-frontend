@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
+import '../../models/sleep_data.dart';
 
 class SleepStats extends StatelessWidget {
-  const SleepStats({super.key});
+  final SleepData data;
+
+  const SleepStats({
+    super.key,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildStat('⭐ Sleep rate', '82%'),
-        _buildStat('😴 Deepsleep', '1h 3min'),
+        _buildStat(
+          '⭐ Sleep rate',
+          '${data.sleepRate.round()}%',
+        ),
+        _buildStat(
+          '😴 Deepsleep',
+          '${data.deepSleepMinutes ~/ 60}h ${data.deepSleepMinutes % 60}min',
+        ),
       ],
     );
   }
