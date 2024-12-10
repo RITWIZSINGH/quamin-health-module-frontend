@@ -11,7 +11,7 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const LaunchScreen(),
+      builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
       path: '/signup',

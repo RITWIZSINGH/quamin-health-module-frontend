@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 
 class SleepSchedule extends StatefulWidget {
@@ -100,48 +102,93 @@ class _SleepScheduleState extends State<SleepSchedule> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Edit Sleep Schedule',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter bottomSheetSetState) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Edit Sleep Schedule',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    title: const Text('Bedtime'),
+                    subtitle: Text(
+                        '${_formatTime(_bedTime)} ${_bedTime.period == DayPeriod.am ? 'am' : 'pm'}'),
+                    trailing: const Icon(Icons.edit),
+                    onTap: () async {
+                      final TimeOfDay? picked = await showTimePicker(
+                        context: context,
+                        initialTime: _bedTime,
+                        builder: (BuildContext context, Widget? child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context)
+                                .copyWith(alwaysUse24HourFormat: false),
+                            child: child!,
+                          );
+                        },
+                      );
+
+                      if (picked != null) {
+                        // Update the parent widget's state
+                        setState(() {
+                          _bedTime = picked;
+                        });
+                        // Update the bottom sheet's local state
+                        bottomSheetSetState(() {});
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Wake up time'),
+                    subtitle: Text(
+                        '${_formatTime(_wakeUpTime)} ${_wakeUpTime.period == DayPeriod.am ? 'am' : 'pm'}'),
+                    trailing: const Icon(Icons.edit),
+                    onTap: () async {
+                      final TimeOfDay? picked = await showTimePicker(
+                        context: context,
+                        initialTime: _wakeUpTime,
+                        builder: (BuildContext context, Widget? child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context)
+                                .copyWith(alwaysUse24HourFormat: false),
+                            child: child!,
+                          );
+                        },
+                      );
+
+                      if (picked != null) {
+                        // Update the parent widget's state
+                        setState(() {
+                          _wakeUpTime = picked;
+                        });
+                        // Update the bottom sheet's local state
+                        bottomSheetSetState(() {});
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: Color(0xff636ae8)),
+                    child: const Text(
+                      'Done',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              ListTile(
-                title: const Text('Bedtime'),
-                // subtitle: Text(_formatTime(_bedTime) +
-                //     ' ' +
-                //     (_bedTime.period == DayPeriod.am ? 'am' : 'pm')),
-                trailing: const Icon(Icons.edit),
-                onTap: () => _selectTime(context, true),
-              ),
-              ListTile(
-                title: const Text('Wake up time'),
-                // subtitle: Text(_formatTime(_wakeUpTime) + ' ' +
-                //     (_wakeUpTime.period == DayPeriod.am ? 'am' : 'pm')),
-                trailing: const Icon(Icons.edit),
-                onTap: () => _selectTime(context, false),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text(
-                  'Done',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    backgroundColor: Color(0xff636ae8)),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
