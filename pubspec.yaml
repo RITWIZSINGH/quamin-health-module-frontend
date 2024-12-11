@@ -76,6 +76,10 @@ flutter:
     - assets/images/apple.svg
     - assets/logo/
     - assets/logo/logo.png
+    - assets/icons/
+    - assets/icons/diet.png
+    - assets/icons/health.png
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

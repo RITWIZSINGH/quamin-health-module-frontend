@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240" height="240" viewBox="0 0 240 240" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- Heart shape container -->
+    <path d="M120,220 Q40,160 40,100 Q40,60 80,60 Q115,60 120,100 Q125,60 160,60 Q200,60 200,100 Q200,160 120,220" 
+          fill="white" 
+          stroke="#6366F1" 
+          stroke-width="2"/>
+    
+    <!-- Activity line -->
+    <path d="M60,120 L90,120 L100,90 L140,150 L150,120 L180,120" 
+          stroke="#6366F1" 
+          stroke-width="2" 
+          fill="none"/>
+    
+    <!-- Fitness elements -->
+    <g fill="#6366F1" opacity="0.1" stroke="#6366F1" stroke-width="2">
+        <!-- Dumbbell -->
+        <rect x="70" y="160" width="40" height="10" rx="5"/>
+        <circle cx="65" cy="165" r="8"/>
+        <circle cx="115" cy="165" r="8"/>
+        
+        <!-- Apple -->
+        <circle cx="160" cy="90" r="12"/>
+        <path d="M160,78 Q165,70 170,78" fill="none"/>
+    </g>
+    
+    <!-- Decorative elements -->
+    <g stroke="#6366F1" fill="none" stroke-width="2">
+        <circle cx="80" cy="90" r="6"/>
+        <circle cx="170" cy="140" r="6"/>
+        <path d="M140,80 Q150,70 160,80"/>
+        <path d="M90,140 Q100,130 110,140"/>
+    </g>
+</svg>

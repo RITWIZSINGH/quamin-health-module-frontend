@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../services/auth_service.dart';
-import '../../widgets/signup_widgets/animated_logo.dart';
-import '../../widgets/signup_widgets/social_login_button.dart';
+import '../health_module/services/auth_service.dart';
+import '../health_module/widgets/signup_widgets/animated_logo.dart';
+import '../health_module/widgets/signup_widgets/social_login_button.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -26,7 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
     try {
       final userCredential = await _authService.signInWithGoogle();
       if (userCredential?.user != null) {
-        context.go('/dashboard');
+        context.go('/choose_module');
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -46,7 +46,7 @@ class _SignupScreenState extends State<SignupScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      context.go('/dashboard');
+      context.go('/choose_module');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to sign up: $e")),
