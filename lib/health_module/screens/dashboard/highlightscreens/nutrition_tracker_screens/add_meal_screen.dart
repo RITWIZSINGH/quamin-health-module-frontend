@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/models/meal.dart';
-import '/providers/meal_provider.dart';
-import '/widgets/common/primary_button.dart';
+import '../../../../models/meal.dart';
+import '../../../../providers/meal_provider.dart';
+import '../../../../widgets/common/primary_button.dart';
 
 class AddMealScreen extends StatefulWidget {
   const AddMealScreen({super.key});

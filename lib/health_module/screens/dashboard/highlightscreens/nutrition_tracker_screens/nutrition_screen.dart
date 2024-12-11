@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '/widgets/nutrition_screen_widgets/calorie_summary.dart';
-import '/widgets/nutrition_screen_widgets/nutrition_chart.dart';
-import '/widgets/nutrition_screen_widgets/macros_breakdown.dart';
-import '/widgets/common/primary_button.dart';
+import '../../../../widgets/nutrition_screen_widgets/calorie_summary.dart';
+import '../../../../widgets/nutrition_screen_widgets/nutrition_chart.dart';
+import '../../../../widgets/nutrition_screen_widgets/macros_breakdown.dart';
+import '../../../../widgets/common/primary_button.dart';
 import 'add_meal_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:quamin_health_module/providers/meal_provider.dart';
+import 'package:quamin_health_module/health_module/providers/meal_provider.dart';
 
 class NutritionScreen extends StatelessWidget {
   const NutritionScreen({super.key});

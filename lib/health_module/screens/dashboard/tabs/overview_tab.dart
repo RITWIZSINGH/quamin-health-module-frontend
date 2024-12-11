@@ -1,9 +1,9 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:quamin_health_module/routes/custom_page_route.dart';
-import 'package:quamin_health_module/screens/dashboard/all_health_data_screen.dart';
-import 'package:quamin_health_module/screens/dashboard/tabs/explore_tab.dart';
+import 'package:quamin_health_module/health_module/routes/custom_page_route.dart';
+import 'package:quamin_health_module/health_module/screens/dashboard/all_health_data_screen.dart';
+import 'package:quamin_health_module/health_module/screens/dashboard/tabs/explore_tab.dart';
 
 class OverviewTab extends StatelessWidget {
   const OverviewTab({super.key});

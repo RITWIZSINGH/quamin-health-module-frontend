@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quamin_health_module/firebase_options.dart';
-import 'package:quamin_health_module/routes/router.dart';
-import 'package:quamin_health_module/theme/app_theme.dart';
-import 'providers/meal_provider.dart';
+import 'package:quamin_health_module/health_module/routes/router.dart';
+import 'package:quamin_health_module/health_module/theme/app_theme.dart';
+import 'health_module/providers/meal_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
   
 void main() async {

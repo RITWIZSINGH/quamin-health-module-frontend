@@ -2,21 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '/services/auth_service.dart';
-import '/widgets/signup_widgets/animated_logo.dart';
-import '/widgets/signup_widgets/social_login_button.dart';
+import '../../services/auth_service.dart';
+import '../../widgets/signup_widgets/animated_logo.dart';
+import '../../widgets/signup_widgets/social_login_button.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SigninScreenState extends State<SigninScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _authService = AuthService();
   bool _isLoading = false;
 
@@ -36,19 +37,19 @@ class _SigninScreenState extends State<SigninScreen> {
     }
   }
 
-  Future<void> _handleSignIn() async {
+  Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
     try {
-      await _authService.signInWithEmailAndPassword(
+      await _authService.signUpWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
       context.go('/dashboard');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to sign in: $e")),
+        SnackBar(content: Text("Failed to sign up: $e")),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -59,6 +60,7 @@ class _SigninScreenState extends State<SigninScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -94,7 +96,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       );
                     },
                     child: Text(
-                      'Welcome Back 👋',
+                      'Create Account 🚀',
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -153,36 +155,39 @@ class _SigninScreenState extends State<SigninScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
                             }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Confirm Password',
+                            hintText: 'Confirm your password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            fillColor: Colors.grey.shade200,
+                            filled: true,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please confirm your password';
+                            }
+                            if (value != _passwordController.text) {
+                              return 'Passwords do not match';
+                            }
                             return null;
                           },
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  TweenAnimationBuilder<double>(
-                    duration: const Duration(milliseconds: 1100),
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    builder: (context, value, child) {
-                      return Opacity(
-                        opacity: value,
-                        child: child,
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Forgot Password?",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 24),
                   TweenAnimationBuilder<double>(
                     duration: const Duration(milliseconds: 1200),
                     tween: Tween(begin: 0.0, end: 1.0),
@@ -196,7 +201,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       );
                     },
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _handleSignIn,
+                      onPressed: _isLoading ? null : _handleSignUp,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         minimumSize: const Size(double.infinity, 56),
@@ -207,7 +212,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       child: _isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
-                              'Sign In',
+                              'Sign Up',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -227,7 +232,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       );
                     },
                     child: const Text(
-                      "OR LOG IN WITH",
+                      "OR SIGN UP WITH",
                       style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
@@ -284,11 +289,11 @@ class _SigninScreenState extends State<SigninScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Don\'t have an account?'),
+                        const Text('Already have an account?'),
                         TextButton(
-                          onPressed: () => context.go('/signup'),
+                          onPressed: () => context.go('/signin'),
                           child: const Text(
-                            'Sign Up',
+                            'Sign In',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),

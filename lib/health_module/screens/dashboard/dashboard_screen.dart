@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'tabs/overview_tab.dart';
 import 'tabs/explore_tab.dart';
 import 'tabs/sharing_tab.dart';
-import '/widgets/common/animated_page.dart';
+import '../../widgets/common/animated_page.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

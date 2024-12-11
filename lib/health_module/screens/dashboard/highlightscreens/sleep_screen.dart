@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/../models/sleep_data.dart';
-import 'package:quamin_health_module/widgets/sleep_screen_widgets/sleep_chart.dart';
-import 'package:quamin_health_module/widgets/sleep_screen_widgets/sleep_schedule.dart';
-import 'package:quamin_health_module/widgets/sleep_screen_widgets/sleep_stats.dart';
-import 'package:quamin_health_module/widgets/sleep_screen_widgets/sleep_summary.dart';
+import '../../../models/sleep_data.dart';
+import 'package:quamin_health_module/health_module/widgets/sleep_screen_widgets/sleep_chart.dart';
+import 'package:quamin_health_module/health_module/widgets/sleep_screen_widgets/sleep_schedule.dart';
+import 'package:quamin_health_module/health_module/widgets/sleep_screen_widgets/sleep_stats.dart';
+import 'package:quamin_health_module/health_module/widgets/sleep_screen_widgets/sleep_summary.dart';
 
 class SleepScreen extends StatefulWidget {
   const SleepScreen({super.key});
