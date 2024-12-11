@@ -37,15 +37,15 @@ class _AddMealScreenState extends State<AddMealScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildNutrientInput('Fat (g)', (value) {
+              _buildNutrientInput('Fat (g)', Color(0xff878ced), (value) {
                 setState(() => _fat = double.parse(value));
               }),
               const SizedBox(height: 16),
-              _buildNutrientInput('Protein (g)', (value) {
+              _buildNutrientInput('Protein (g)', Color(0xffefa98d), (value) {
                 setState(() => _protein = double.parse(value));
               }),
               const SizedBox(height: 16),
-              _buildNutrientInput('Carbs (g)', (value) {
+              _buildNutrientInput('Carbs (g)', Color(0xff9d7ee7), (value) {
                 setState(() => _carbs = double.parse(value));
               }),
               const SizedBox(height: 32),
@@ -59,7 +59,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                       carbs: _carbs,
                       timestamp: DateTime.now(),
                     );
-                    
+
                     context.read<MealProvider>().addMeal(meal);
                     Navigator.pop(context);
                   }
@@ -72,16 +72,31 @@ class _AddMealScreenState extends State<AddMealScreen> {
     );
   }
 
-  Widget _buildNutrientInput(String label, Function(String) onChanged) {
+  Widget _buildNutrientInput(
+      String label, Color color, Function(String) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 15,
+              width: 15,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50), color: color),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         TextFormField(

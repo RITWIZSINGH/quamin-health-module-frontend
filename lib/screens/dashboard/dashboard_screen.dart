@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'tabs/overview_tab.dart';
 import 'tabs/explore_tab.dart';
 import 'tabs/sharing_tab.dart';
+import '/widgets/common/animated_page.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,6 +13,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
+  final PageController _pageController = PageController();
 
   final _tabs = const [
     OverviewTab(),
@@ -20,35 +22,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _onNavigationItemTapped(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutQuad, // Smoother easing curve
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        transitionBuilder: (child, animation) {
-          return FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0.05, 0),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
-            ),
+      body: PageView.builder(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        physics: const BouncingScrollPhysics().applyTo(
+          const AlwaysScrollableScrollPhysics(),
+        ),
+        itemCount: _tabs.length,
+        itemBuilder: (context, index) {
+          return AnimatedPage(
+            index: index,
+            child: _tabs[index],
           );
         },
-        child: KeyedSubtree(
-          key: ValueKey(_currentIndex),
-          child: _tabs[_currentIndex],
-        ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        animationDuration: const Duration(milliseconds: 400),
+        onDestinationSelected: _onNavigationItemTapped,
+        animationDuration: const Duration(milliseconds: 300),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
