@@ -33,14 +33,14 @@ class ChooseOptionsScreen extends StatelessWidget {
                       title: 'Health Module',
                       svgPath: 'assets/icons/health.png',
                       onTap: () {
-                        context.go('/dashboard');
+                        context.go('/health_dashboard');
                       },
                     ),
                     OptionCard(
                       title: 'Diet Plan',
                       svgPath: 'assets/icons/diet.png',
                       onTap: () {
-                        // Navigate to diet plan
+                        context.go('/diet_dashboard');
                       },
                     ),
                   ],

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../health_module/services/auth_service.dart';
+import 'services/auth_service.dart';
 import '../health_module/widgets/signup_widgets/animated_logo.dart';
 import '../health_module/widgets/signup_widgets/social_login_button.dart';
 
