@@ -5,7 +5,7 @@ import 'package:quamin_health_module/choose_module/choose_options_screen.dart';
 import 'package:quamin_health_module/diet_module/screens/diet_dasboard_screen.dart';
 import 'package:quamin_health_module/startscreens/launch_screen.dart';
 import 'package:quamin_health_module/startscreens/signin_screen.dart';
-import 'package:quamin_health_module/health_module/screens/dashboard/dashboard_screen.dart';
+import 'package:quamin_health_module/health_module/screens/dashboard/health_dashboard_screen.dart';
 import 'package:quamin_health_module/startscreens/signup_screen.dart';
 
 final router = GoRouter(
@@ -13,7 +13,7 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const ChooseOptionsScreen(),
+      builder: (context, state) => const LaunchScreen(),
     ),
     GoRoute(
       path: '/signup',

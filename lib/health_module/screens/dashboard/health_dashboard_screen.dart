@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
+import 'tabs/overview_tab.dart';
+import 'tabs/explore_tab.dart';
+import 'tabs/sharing_tab.dart';
+import '../../widgets/common/animated_page.dart';
 import 'package:go_router/go_router.dart';
-import 'tabs/diet_tracker_tab.dart';
-import 'tabs/order_items_tab.dart';
-import 'tabs/track_order_tab.dart';
-import 'tabs/generate_plan_tab.dart';
-import '/health_module/widgets/common/animated_page.dart';
 
-class DietDashboardScreen extends StatefulWidget {
-  const DietDashboardScreen({super.key});
+class HealthDashboardScreen extends StatefulWidget {
+  const HealthDashboardScreen({super.key});
 
   @override
-  State<DietDashboardScreen> createState() => _DietDashboardScreenState();
+  State<HealthDashboardScreen> createState() => _HealthDashboardScreenState();
 }
 
-class _DietDashboardScreenState extends State<DietDashboardScreen> {
+class _HealthDashboardScreenState extends State<HealthDashboardScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
   final _tabs = const [
-    DietTrackerTab(),
-    OrderItemsTab(),
-    TrackOrderTab(),
-    GeneratePlanTab(),
+    OverviewTab(),
+    ExploreTab(),
+    SharingTab(),
   ];
 
   @override
@@ -40,7 +38,7 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 400),
-      curve: Curves.easeOutQuad,
+      curve: Curves.easeOutQuad, // Smoother easing curve
     );
   }
 
@@ -73,24 +71,19 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
           animationDuration: const Duration(milliseconds: 300),
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.track_changes_outlined),
-              selectedIcon: Icon(Icons.track_changes),
-              label: 'Track Diet',
+              icon: Icon(Icons.dashboard_outlined),
+              selectedIcon: Icon(Icons.dashboard),
+              label: 'Overview',
             ),
             NavigationDestination(
-              icon: Icon(Icons.shopping_cart_outlined),
-              selectedIcon: Icon(Icons.shopping_cart),
-              label: 'Order',
+              icon: Icon(Icons.explore_outlined),
+              selectedIcon: Icon(Icons.explore),
+              label: 'Explore',
             ),
             NavigationDestination(
-              icon: Icon(Icons.local_shipping_outlined),
-              selectedIcon: Icon(Icons.local_shipping),
-              label: 'Track Order',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.auto_awesome_outlined),
-              selectedIcon: Icon(Icons.auto_awesome),
-              label: 'Generate Plan',
+              icon: Icon(Icons.share_outlined),
+              selectedIcon: Icon(Icons.share),
+              label: 'Sharing',
             ),
           ],
         ),
