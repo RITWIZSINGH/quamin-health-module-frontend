@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class DietPlanResponse {
   final DailyNutrientRequirements dailyNutrientRequirements;
   final String summaryInHindi;
@@ -12,7 +10,7 @@ class DietPlanResponse {
   factory DietPlanResponse.fromJson(Map<String, dynamic> json) {
     return DietPlanResponse(
       dailyNutrientRequirements: DailyNutrientRequirements.fromJson(
-        json['daily_nutrient_requirements']['recommendations'],
+        json['daily_nutrient_requirements']
       ),
       summaryInHindi: json['summary_in_hindi'],
     );
@@ -22,9 +20,13 @@ class DietPlanResponse {
 class DailyNutrientRequirements {
   final String recommendations;
 
-  DailyNutrientRequirements({required this.recommendations});
+  DailyNutrientRequirements({
+    required this.recommendations,
+  });
 
-  factory DailyNutrientRequirements.fromJson(String recommendations) {
-    return DailyNutrientRequirements(recommendations: recommendations);
+  factory DailyNutrientRequirements.fromJson(Map<String, dynamic> json) {
+    return DailyNutrientRequirements(
+      recommendations: json['recommendations'],
+    );
   }
 }

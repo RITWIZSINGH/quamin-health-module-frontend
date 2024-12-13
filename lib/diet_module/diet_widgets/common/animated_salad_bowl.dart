@@ -10,7 +10,6 @@ class AnimatedSaladBowl extends StatelessWidget {
       width: 200,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey[100],
       ),
       child: Image.asset(
         'assets/images/salad_bowl.gif',

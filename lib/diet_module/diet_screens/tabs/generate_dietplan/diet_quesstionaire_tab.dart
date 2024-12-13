@@ -18,23 +18,31 @@ class _DietQuestionnaireTabState extends State<DietQuestionnaireTab> {
   DietPlanResponse? _dietPlanResponse;
   DietPeriod? _selectedPeriod;
   bool _isLoading = false;
+  String? _errorMessage;
 
   void _onPeriodSelected(DietPeriod period) {
     setState(() => _selectedPeriod = period);
   }
 
   Future<void> _onFormSubmit(UserInfo userInfo) async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     
     try {
       final response = await _dietService.getDietRecommendations(userInfo);
-      setState(() => _dietPlanResponse = response);
+      setState(() {
+        _dietPlanResponse = response;
+        _isLoading = false;
+      });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    } finally {
-      setState(() => _isLoading = false);
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
+      });
+      
+      print(_errorMessage);
     }
   }
 
