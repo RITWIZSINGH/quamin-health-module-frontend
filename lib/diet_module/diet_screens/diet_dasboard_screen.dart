@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quamin_health_module/diet_module/diet_models/diet_plan_response.dart';
 import 'tabs/diet_tracker_tab.dart';
 import 'tabs/order_items_tab.dart';
 import 'tabs/track_order_tab.dart';
@@ -21,7 +22,7 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
     DietTrackerTab(),
     OrderItemsTab(),
     TrackOrderTab(),
-    GeneratePlanTab(),
+    DietQuestionnaireTab(),
   ];
 
   @override
