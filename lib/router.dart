@@ -2,7 +2,7 @@
 
 import 'package:go_router/go_router.dart';
 import 'package:quamin_health_module/choose_module/choose_options_screen.dart';
-import 'package:quamin_health_module/diet_module/screens/diet_dasboard_screen.dart';
+import 'package:quamin_health_module/diet_module/diet_screens/diet_dasboard_screen.dart';
 import 'package:quamin_health_module/startscreens/launch_screen.dart';
 import 'package:quamin_health_module/startscreens/signin_screen.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/health_dashboard_screen.dart';
