@@ -105,14 +105,16 @@ class CircularProgressPainter extends CustomPainter {
 
     // Background ring (full circle with low opacity)
     final backgroundPaint = Paint()
-      ..color = color.withOpacity(0.1) // Very low opacity for background ring
+      ..color =
+          color.withValues(alpha: 0.1) // Very low opacity for background ring
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
 
     // Progress ring
     final progressPaint = Paint()
-      ..color = color.withOpacity(0.7) // Slightly more opaque for the progress
+      ..color =
+          color.withValues(alpha: 0.7) // Slightly more opaque for the progress
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;

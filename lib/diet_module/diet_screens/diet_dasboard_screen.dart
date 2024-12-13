@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quamin_health_module/diet_module/diet_models/diet_plan_response.dart';
+import 'package:quamin_health_module/diet_module/diet_screens/tabs/generate_dietplan/diet_period_selection_screen.dart';
 import 'tabs/diet_tracker_tab.dart';
 import 'tabs/order_items_tab.dart';
 import 'tabs/track_order_tab.dart';
-import 'tabs/generate_plan_tab.dart';
+import 'tabs/generate_dietplan/diet_quesstionaire_tab.dart';
 import '/health_module/widgets/common/animated_page.dart';
 
 class DietDashboardScreen extends StatefulWidget {

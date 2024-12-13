@@ -7,6 +7,8 @@
 .atom/
 .build/
 .buildlog/
+/lib/diet_module/diet_config/
+
 .history
 .svn/
 .swiftpm/
