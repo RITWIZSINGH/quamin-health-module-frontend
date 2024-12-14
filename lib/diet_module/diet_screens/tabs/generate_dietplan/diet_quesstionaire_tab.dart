@@ -11,7 +11,8 @@ class DietQuestionnaireScreen extends StatefulWidget {
   const DietQuestionnaireScreen({super.key});
 
   @override
-  State<DietQuestionnaireScreen> createState() => _DietQuestionnaireScreenState();
+  State<DietQuestionnaireScreen> createState() =>
+      _DietQuestionnaireScreenState();
 }
 
 class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
@@ -30,7 +31,7 @@ class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
       _isLoading = true;
       _errorMessage = null;
     });
-    
+
     try {
       final response = await _dietService.getDietRecommendations(userInfo);
       setState(() {
@@ -61,24 +62,66 @@ class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('${_selectedPeriod!.displayName} Diet Plan'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => setState(() => _selectedPeriod = null),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xffe1f1cf), Color(0xffa8dfc9)],
+          ),
         ),
-      ),
-      body: Stack(
-        children: [
-          DietForm(onSubmit: _onFormSubmit),
-          if (_isLoading)
-            Container(
-              color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Custom AppBar
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => setState(() => _selectedPeriod = null),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${_selectedPeriod!.displayName} Diet Plan',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-        ],
+              
+              // Expanded to allow scrolling and full view of form
+              Expanded(
+                child: Stack(
+                  children: [
+                    // Form with padding and scrollview
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: DietForm(
+                        onSubmit: _onFormSubmit,
+                      ),
+                    ),
+                    
+                    // Loading indicator
+                    if (_isLoading)
+                      Container(
+                        color: Colors.black54,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

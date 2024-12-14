@@ -13,8 +13,8 @@ class DietPlanSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
+    return Scaffold(
+      body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -31,6 +31,16 @@ class DietPlanSelectionScreen extends StatelessWidget {
                 children: [
                   const AnimatedSaladBowl(),
                   const SizedBox(height: 32),
+                  Text(
+                    'Choose Your Diet Plan',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green[800],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
                   PlanOptionCard(
                     title: '3 Months Plan',
                     description:

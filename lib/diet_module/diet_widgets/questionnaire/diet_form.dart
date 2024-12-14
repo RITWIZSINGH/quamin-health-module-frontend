@@ -19,13 +19,12 @@ class _DietFormState extends State<DietForm> {
   final _ageController = TextEditingController();
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
-  final _symptomsController = TextEditingController();
-  final _medicalConditionsController = TextEditingController();
-  String _activityLevel = 'Moderate';
-  String _dietaryPreferences = 'Vegetarian';
-  final _preferredCuisineController = TextEditingController();
-  final _sleepPatternController = TextEditingController();
-  String _stressLevel = 'Medium';
+  final _foodCrazyController = TextEditingController();
+  final _favoriteFoodController = TextEditingController();
+  final _gymFrequencyController = TextEditingController();
+  final _sleepHoursController = TextEditingController();
+
+  String _dietGoal = 'Weight Loss';
 
   @override
   Widget build(BuildContext context) {
@@ -36,69 +35,138 @@ class _DietFormState extends State<DietForm> {
         children: [
           const AnimatedSaladBowl(),
           const SizedBox(height: 24),
-          _buildTextField(
+          Text(
+            'Welcome to Your Personalized Diet Journey! ',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.green[800],
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          _buildPlayfulTextField(
             controller: _ageController,
-            label: 'Age',
+            label: '🎂 How many candles will light up your next birthday cake?',
+            hint: 'Enter your age with a smile!',
             keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Oops! We need to know how many candles to buy 🕯️';
+              }
+              final age = int.tryParse(value);
+              return age == null || age < 1 || age > 120
+                  ? 'A real age between 1 and 120, please! 😉'
+                  : null;
+            },
           ),
-          _buildTextField(
+          _buildPlayfulTextField(
             controller: _weightController,
-            label: 'Weight (kg)',
+            label: '⚖️ What does the scale whisper to you? (No judgment zone!)',
+            hint: 'Your weight in kg (our little secret)',
             keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'The scale is feeling shy! Help it speak up 🤫';
+              }
+              final weight = double.tryParse(value);
+              return weight == null || weight < 20 || weight > 300
+                  ? 'Let\'s keep it real, superhuman! 💪'
+                  : null;
+            },
           ),
-          _buildTextField(
+          _buildPlayfulTextField(
             controller: _heightController,
-            label: 'Height (cm)',
+            label: '📏 How tall are you in the kingdom of nutrition?',
+            hint: 'Height in cm (stand proud!)',
             keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Height is playing hide and seek 🙈';
+              }
+              final height = double.tryParse(value);
+              return height == null || height < 50 || height > 250
+                  ? 'Are you a secret giant or a playful elf? 🧝'
+                  : null;
+            },
           ),
-          _buildTextField(
-            controller: _symptomsController,
-            label: 'Symptoms',
+          _buildPlayfulTextField(
+            controller: _foodCrazyController,
+            label: '🍔 On a scale of salad to pizza, how food crazy are you?',
+            hint: 'Tell us about your food adventures',
             maxLines: 3,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Share your food love story! 🍽️';
+              }
+              return null;
+            },
           ),
-          _buildTextField(
-            controller: _medicalConditionsController,
-            label: 'Medical Conditions',
-            maxLines: 3,
-          ),
-          _buildDropdown(
-            value: _activityLevel,
-            label: 'Activity Level',
-            items: const ['Low', 'Moderate', 'High'],
-            onChanged: (value) => setState(() => _activityLevel = value!),
-          ),
-          _buildDropdown(
-            value: _dietaryPreferences,
-            label: 'Dietary Preferences',
-            items: const ['Vegetarian', 'Vegan', 'Non-vegetarian'],
-            onChanged: (value) => setState(() => _dietaryPreferences = value!),
-          ),
-          _buildTextField(
-            controller: _preferredCuisineController,
-            label: 'Preferred Cuisine',
-          ),
-          _buildTextField(
-            controller: _sleepPatternController,
-            label: 'Sleep Pattern',
+          _buildPlayfulTextField(
+            controller: _favoriteFoodController,
+            label: '❤️ Your ride-or-die food that makes you happiest?',
+            hint: 'The ultimate comfort food champion',
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Every food has a story! What\'s yours? 🍲';
+              }
+              return null;
+            },
           ),
           _buildDropdown(
-            value: _stressLevel,
-            label: 'Stress Level',
-            items: const ['Low', 'Medium', 'High'],
-            onChanged: (value) => setState(() => _stressLevel = value!),
+            value: _dietGoal,
+            label: '🎯 Your Diet Mission, Should You Choose to Accept It',
+            items: const [
+              'Weight Loss',
+              'Muscle Gain',
+              'Maintain',
+              'Get Healthy'
+            ],
+            onChanged: (value) => setState(() => _dietGoal = value!),
+          ),
+          _buildPlayfulTextField(
+            controller: _gymFrequencyController,
+            label: '💪 How often do you dance with weights?',
+            hint: 'Gym visits per week (be honest!)',
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Exercise frequency is calling! 🏋️‍♀️';
+              }
+              final visits = int.tryParse(value);
+              return visits == null || visits < 0 || visits > 7
+                  ? 'Let\'s keep it between 0 and 7 days, fitness ninja!'
+                  : null;
+            },
+          ),
+          _buildPlayfulTextField(
+            controller: _sleepHoursController,
+            label: '😴 How many hours do you spend in dreamland?',
+            hint: 'Average sleep hours',
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Sleepy time stats needed! 🛌';
+              }
+              final sleep = double.tryParse(value);
+              return sleep == null || sleep < 2 || sleep > 14
+                  ? 'Between 2 and 14 hours, sleep champion!'
+                  : null;
+            },
           ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: _submitForm,
             style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green[700],
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: const Text(
-              'Generate Diet Plan',
-              style: TextStyle(fontSize: 16),
+              'Unlock My Diet Destiny! 🚀',
+              style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),
         ],
@@ -106,11 +174,13 @@ class _DietFormState extends State<DietForm> {
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildPlayfulTextField({
     required TextEditingController controller,
     required String label,
+    String? hint,
     TextInputType? keyboardType,
     int? maxLines,
+    String? Function(String?)? validator,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -118,13 +188,16 @@ class _DietFormState extends State<DietForm> {
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
+          hintText: hint,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
+          filled: true,
+          fillColor: Colors.green[50],
         ),
         keyboardType: keyboardType,
         maxLines: maxLines ?? 1,
-        validator: (value) => value?.isEmpty ?? true ? 'Please enter $label' : null,
+        validator: validator,
       ),
     );
   }
@@ -142,8 +215,10 @@ class _DietFormState extends State<DietForm> {
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
+          filled: true,
+          fillColor: Colors.green[50],
         ),
         items: items.map((String value) {
           return DropdownMenuItem<String>(
@@ -162,13 +237,13 @@ class _DietFormState extends State<DietForm> {
         age: int.parse(_ageController.text),
         weight: double.parse(_weightController.text),
         height: double.parse(_heightController.text),
-        symptoms: _symptomsController.text,
-        medicalConditions: _medicalConditionsController.text,
-        activityLevel: _activityLevel,
-        dietaryPreferences: _dietaryPreferences,
-        preferredCuisine: _preferredCuisineController.text,
-        sleepPattern: _sleepPatternController.text,
-        stressLevel: _stressLevel,
+        symptoms: _foodCrazyController.text,
+        medicalConditions: _favoriteFoodController.text,
+        activityLevel: _gymFrequencyController.text, // Repurposed gym visits
+        dietaryPreferences: _dietGoal,
+        preferredCuisine: '', // Left empty as not directly captured
+        sleepPattern: _sleepHoursController.text,
+        stressLevel: 'Medium', // Default value
       );
       widget.onSubmit(userInfo);
     }
@@ -179,10 +254,10 @@ class _DietFormState extends State<DietForm> {
     _ageController.dispose();
     _weightController.dispose();
     _heightController.dispose();
-    _symptomsController.dispose();
-    _medicalConditionsController.dispose();
-    _preferredCuisineController.dispose();
-    _sleepPatternController.dispose();
+    _foodCrazyController.dispose();
+    _favoriteFoodController.dispose();
+    _gymFrequencyController.dispose();
+    _sleepHoursController.dispose();
     super.dispose();
   }
 }
