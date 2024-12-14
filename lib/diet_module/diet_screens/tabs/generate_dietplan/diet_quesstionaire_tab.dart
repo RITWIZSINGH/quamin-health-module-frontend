@@ -3,17 +3,18 @@ import '../../../diet_models/diet_period.dart';
 import '../../../diet_models/user_info.dart';
 import '../../../diet_services/diet_service.dart';
 import '../../../diet_models/diet_plan_response.dart';
-import 'package:quamin_health_module/diet_module/diet_screens/tabs/generate_dietplan/diet_period_selection_screen.dart';
 import '../../../diet_widgets/questionnaire/diet_form.dart';
+import '../../../diet_widgets/questionnaire/diet_plan_results.dart';
+import '../../../diet_screens/tabs/generate_dietplan/diet_plan_selection_screen.dart';
 
-class DietQuestionnaireTab extends StatefulWidget {
-  const DietQuestionnaireTab({super.key});
+class DietQuestionnaireScreen extends StatefulWidget {
+  const DietQuestionnaireScreen({super.key});
 
   @override
-  State<DietQuestionnaireTab> createState() => _DietQuestionnaireTabState();
+  State<DietQuestionnaireScreen> createState() => _DietQuestionnaireScreenState();
 }
 
-class _DietQuestionnaireTabState extends State<DietQuestionnaireTab> {
+class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
   final _dietService = DietService();
   DietPlanResponse? _dietPlanResponse;
   DietPeriod? _selectedPeriod;
@@ -41,20 +42,21 @@ class _DietQuestionnaireTabState extends State<DietQuestionnaireTab> {
         _isLoading = false;
         _errorMessage = e.toString();
       });
-      
-      print(_errorMessage);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (_dietPlanResponse != null) {
-      return _buildResults();
+      return DietPlanResults(
+        response: _dietPlanResponse!,
+        onBack: () => setState(() => _dietPlanResponse = null),
+      );
     }
 
     if (_selectedPeriod == null) {
-      return DietPeriodSelectionScreen(
-        onPeriodSelected: _onPeriodSelected,
+      return DietPlanSelectionScreen(
+        onPlanSelected: _onPeriodSelected,
       );
     }
 
@@ -76,62 +78,6 @@ class _DietQuestionnaireTabState extends State<DietQuestionnaireTab> {
                 child: CircularProgressIndicator(),
               ),
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildResults() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Diet Plan'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => setState(() => _dietPlanResponse = null),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Daily Nutrient Requirements',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(_dietPlanResponse!.dailyNutrientRequirements.recommendations),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'हिंदी में सारांश',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(_dietPlanResponse!.summaryInHindi),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
