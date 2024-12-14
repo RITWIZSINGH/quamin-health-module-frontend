@@ -50,51 +50,74 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop,result) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
         context.go('/choose_module'); // Navigate back to ChooseOptionsScreen
       },
-      child: Scaffold(
-        body: PageView.builder(
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
-          physics: const BouncingScrollPhysics().applyTo(
-            const AlwaysScrollableScrollPhysics(),
+      child: Container(
+        decoration: BoxDecoration(color: Color(0xffa8dfc9)),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: PageView.builder(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              physics: const BouncingScrollPhysics().applyTo(
+                const AlwaysScrollableScrollPhysics(),
+              ),
+              itemCount: _tabs.length,
+              itemBuilder: (context, index) {
+                return AnimatedPage(
+                  index: index,
+                  child: _tabs[index],
+                );
+              },
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: NavigationBar(
+                  selectedIndex: _currentIndex,
+                  labelBehavior:
+                      NavigationDestinationLabelBehavior.onlyShowSelected,
+                  onDestinationSelected: _onNavigationItemTapped,
+                  animationDuration: const Duration(milliseconds: 300),
+                  destinations: const [
+                    NavigationDestination(
+                      icon: Icon(Icons.track_changes_outlined),
+                      selectedIcon:
+                          Icon(Icons.track_changes, color: Color(0xff2ed12e)),
+                      label: 'Track Diet',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.shopping_cart_outlined),
+                      selectedIcon:
+                          Icon(Icons.shopping_cart, color: Color(0xff2ed12e)),
+                      label: 'Order',
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: NavigationDestination(
+                        icon: Icon(Icons.local_shipping_outlined),
+                        selectedIcon: Icon(Icons.local_shipping,
+                            color: Color(0xff2ed12e)),
+                        label: 'Track Order',
+                      ),
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.auto_awesome_outlined),
+                      selectedIcon: Icon(
+                        Icons.auto_awesome,
+                        color: Color(0xff2ed12e),
+                      ),
+                      label: 'Generate Diet',
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          itemCount: _tabs.length,
-          itemBuilder: (context, index) {
-            return AnimatedPage(
-              index: index,
-              child: _tabs[index],
-            );
-          },
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: _currentIndex,
-          onDestinationSelected: _onNavigationItemTapped,
-          animationDuration: const Duration(milliseconds: 300),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.track_changes_outlined),
-              selectedIcon: Icon(Icons.track_changes),
-              label: 'Track Diet',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.shopping_cart_outlined),
-              selectedIcon: Icon(Icons.shopping_cart),
-              label: 'Order',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.local_shipping_outlined),
-              selectedIcon: Icon(Icons.local_shipping),
-              label: 'Track Order',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.auto_awesome_outlined),
-              selectedIcon: Icon(Icons.auto_awesome),
-              label: 'Generate Plan',
-            ),
-          ],
         ),
       ),
     );
