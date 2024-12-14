@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quamin_health_module/diet_module/diet_widgets/common/animated_salad_bowl.dart';
 import '../../../diet_models/diet_period.dart';
 import '../../../diet_models/user_info.dart';
 import '../../../diet_services/diet_service.dart';
@@ -95,7 +96,6 @@ class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
                   ],
                 ),
               ),
-              
               // Expanded to allow scrolling and full view of form
               Expanded(
                 child: Stack(
@@ -107,7 +107,7 @@ class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
                         onSubmit: _onFormSubmit,
                       ),
                     ),
-                    
+
                     // Loading indicator
                     if (_isLoading)
                       Container(

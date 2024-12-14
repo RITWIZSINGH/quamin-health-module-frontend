@@ -29,8 +29,8 @@ class DietPlanSelectionScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const AnimatedSaladBowl(),
-                  const SizedBox(height: 32),
+                  // const AnimatedSaladBowl(),
+                  // const SizedBox(height: 32),
                   Text(
                     'Choose Your Diet Plan',
                     style: TextStyle(

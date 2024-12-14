@@ -96,22 +96,25 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
                           Icon(Icons.shopping_cart, color: Color(0xff2ed12e)),
                       label: 'Order',
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.0),
-                      child: NavigationDestination(
-                        icon: Icon(Icons.local_shipping_outlined),
-                        selectedIcon: Icon(Icons.local_shipping,
-                            color: Color(0xff2ed12e)),
-                        label: 'Track Order',
-                      ),
-                    ),
                     NavigationDestination(
-                      icon: Icon(Icons.auto_awesome_outlined),
-                      selectedIcon: Icon(
-                        Icons.auto_awesome,
-                        color: Color(0xff2ed12e),
+                      icon: Icon(Icons.local_shipping_outlined),
+                      selectedIcon:
+                          Icon(Icons.local_shipping, color: Color(0xff2ed12e)),
+                      label: 'Track Order',
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        // top: 8.0,
+                        right: 10,
                       ),
-                      label: 'Generate Diet',
+                      child: NavigationDestination(
+                        icon: Icon(Icons.auto_awesome_outlined),
+                        selectedIcon: Icon(
+                          Icons.auto_awesome,
+                          color: Color(0xff2ed12e),
+                        ),
+                        label: 'Unlock Diet',
+                      ),
                     ),
                   ],
                 ),
