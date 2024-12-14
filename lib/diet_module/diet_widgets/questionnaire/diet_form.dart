@@ -329,7 +329,7 @@ class _DietFormState extends State<DietForm> {
     );
   }
 
-    void _showIncompleteFormDialog() {
+  void _showIncompleteFormDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -340,20 +340,29 @@ class _DietFormState extends State<DietForm> {
               color: Colors.green[800],
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
           content: Text(
             'Please fill out all the required fields to unlock your personalized diet plan. Every detail helps us create the perfect nutrition journey for you!',
             style: TextStyle(
               color: Colors.green[700],
             ),
+            textAlign: TextAlign.justify,
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(
-                'Got It! ✨',
-                style: TextStyle(
-                  color: Colors.green[700],
-                  fontWeight: FontWeight.bold,
+              child: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.green.shade800),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(
+                  'Got It! ✨',
+                  style: TextStyle(
+                    color: Colors.green[700],
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               onPressed: () {
@@ -386,9 +395,8 @@ class _DietFormState extends State<DietForm> {
     ];
 
     // Check if any required field is empty
-    bool hasEmptyField = requiredControllers.any((controller) => 
-      controller.text.trim().isEmpty
-    );
+    bool hasEmptyField =
+        requiredControllers.any((controller) => controller.text.trim().isEmpty);
 
     // If form is not valid or has empty fields, show dialog
     if (!_formKey.currentState!.validate() || hasEmptyField) {

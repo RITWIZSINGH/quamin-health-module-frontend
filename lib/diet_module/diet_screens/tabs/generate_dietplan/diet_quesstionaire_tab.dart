@@ -34,12 +34,15 @@ class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
     });
 
     try {
+      print('Submitting user info: ${userInfo.toJson()}');
       final response = await _dietService.getDietRecommendations(userInfo);
+      print('Received response: ${response.toJson()}');
       setState(() {
         _dietPlanResponse = response;
         _isLoading = false;
       });
     } catch (e) {
+      print('Detailed error: $e');
       setState(() {
         _isLoading = false;
         _errorMessage = e.toString();
@@ -114,6 +117,27 @@ class _DietQuestionnaireScreenState extends State<DietQuestionnaireScreen> {
                         color: Colors.black54,
                         child: const Center(
                           child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    
+                    // Error message display
+                    if (_errorMessage != null)
+                      Positioned(
+                        bottom: 20,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              _errorMessage!,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
                   ],

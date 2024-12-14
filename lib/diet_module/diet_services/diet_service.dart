@@ -5,8 +5,7 @@ import '../diet_models/user_info.dart';
 import '../diet_models/diet_plan_response.dart';
 
 class DietService {
-  static const String baseUrl =
-      'http://localhost:8000'; // Replace with your computer's IP
+  static const String baseUrl = 'http://localhost:8000'; // Replace with your actual IP
 
   Future<DietPlanResponse> getDietRecommendations(UserInfo userInfo) async {
     try {
@@ -17,11 +16,15 @@ class DietService {
       final response = await http.post(
         Uri.parse('$baseUrl/get-recommendations'),
         headers: headers,
-        body: jsonEncode(userInfo),
+        body: jsonEncode(userInfo.toJson()),
       );
 
+      print('Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
-        return DietPlanResponse.fromJson(jsonDecode(response.body));
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        return DietPlanResponse.fromJson(jsonResponse);
       } else {
         throw Exception(
             'Failed to get diet recommendations: ${response.statusCode} - ${response.body}');
