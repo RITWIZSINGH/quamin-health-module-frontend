@@ -1,3 +1,6 @@
+
+import 'package:quamin_health_module/diet_module/diet_models/daily_nutrient_requirements.dart';
+
 class DietPlanResponse {
   final DailyNutrientRequirements dailyNutrientRequirements;
   final String summaryInHindi;
@@ -10,23 +13,16 @@ class DietPlanResponse {
   factory DietPlanResponse.fromJson(Map<String, dynamic> json) {
     return DietPlanResponse(
       dailyNutrientRequirements: DailyNutrientRequirements.fromJson(
-        json['daily_nutrient_requirements']
+        json['dailyNutrientRequirements'] as Map<String, dynamic>,
       ),
-      summaryInHindi: json['summary_in_hindi'],
+      summaryInHindi: json['summaryInHindi'] as String,
     );
   }
-}
 
-class DailyNutrientRequirements {
-  final String recommendations;
-
-  DailyNutrientRequirements({
-    required this.recommendations,
-  });
-
-  factory DailyNutrientRequirements.fromJson(Map<String, dynamic> json) {
-    return DailyNutrientRequirements(
-      recommendations: json['recommendations'],
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'dailyNutrientRequirements': dailyNutrientRequirements.toJson(),
+      'summaryInHindi': summaryInHindi,
+    };
   }
 }

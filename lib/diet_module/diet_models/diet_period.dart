@@ -1,32 +1,24 @@
 enum DietPeriod {
-  oneWeek,
-  oneMonth,
-  threeMonths,
-  sixMonths;
+  threemonths,
+  sixmonths,
+  twelvemonths;
 
   String get displayName {
     switch (this) {
-      case DietPeriod.oneWeek:
-        return '1 Week';
-      case DietPeriod.oneMonth:
-        return '1 Month';
-      case DietPeriod.threeMonths:
+      case DietPeriod.threemonths:
         return '3 Months';
-      case DietPeriod.sixMonths:
+      case DietPeriod.sixmonths:
         return '6 Months';
+      case DietPeriod.twelvemonths:
+        return '12 Months';
     }
   }
 
-  String get description {
-    switch (this) {
-      case DietPeriod.oneWeek:
-        return 'Perfect for trying out a new diet';
-      case DietPeriod.oneMonth:
-        return 'Great for short-term goals';
-      case DietPeriod.threeMonths:
-        return 'Ideal for sustainable changes';
-      case DietPeriod.sixMonths:
-        return 'Best for long-term transformation';
-    }
+  static DietPeriod fromJson(String value) {
+    return DietPeriod.values.firstWhere(
+      (element) => element.toString().split('.').last == value,
+    );
   }
+
+  String toJson() => toString().split('.').last;
 }
