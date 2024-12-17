@@ -20,10 +20,11 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
   final PageController _pageController = PageController();
 
   final _tabs = const [
-    DietTrackerTab(),
+    // DietTrackerTab(),
+    DietQuestionnaireScreen(),
     OrderItemsTab(),
     TrackOrderTab(),
-    DietQuestionnaireScreen(),
+    // DietQuestionnaireScreen(),
   ];
 
   @override
@@ -85,10 +86,12 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
                   animationDuration: const Duration(milliseconds: 300),
                   destinations: const [
                     NavigationDestination(
-                      icon: Icon(Icons.track_changes_outlined),
-                      selectedIcon:
-                          Icon(Icons.track_changes, color: Color(0xff2ed12e)),
-                      label: 'Track Diet',
+                      icon: Icon(Icons.auto_awesome_outlined),
+                      selectedIcon: Icon(
+                        Icons.auto_awesome,
+                        color: Color(0xff2ed12e),
+                      ),
+                      label: 'Unlock Diet',
                     ),
                     NavigationDestination(
                       icon: Icon(Icons.shopping_cart_outlined),
@@ -101,20 +104,6 @@ class _DietDashboardScreenState extends State<DietDashboardScreen> {
                       selectedIcon:
                           Icon(Icons.local_shipping, color: Color(0xff2ed12e)),
                       label: 'Track Order',
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        // top: 8.0,
-                        right: 10,
-                      ),
-                      child: NavigationDestination(
-                        icon: Icon(Icons.auto_awesome_outlined),
-                        selectedIcon: Icon(
-                          Icons.auto_awesome,
-                          color: Color(0xff2ed12e),
-                        ),
-                        label: 'Unlock Diet',
-                      ),
                     ),
                   ],
                 ),
