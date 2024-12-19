@@ -9,10 +9,6 @@ class OrderItemsTab extends StatefulWidget {
 }
 
 class _OrderItemsTabState extends State<OrderItemsTab> {
-  // Screen Dimensions
-  // late final double sw; // Screen width
-  // late final double sh; // Screen height
-
   final List<String> categories = ["Vegetables", "Fruits", "Bread", "Dairy"];
   final Map<String, List<Map<String, String>>> items = {
     "Vegetables": [
@@ -38,6 +34,18 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
   };
 
   int selectedIndex = 0;
+  String searchQuery = '';
+  TextEditingController searchController = TextEditingController();
+
+  List<Map<String, String>> getFilteredItems() {
+    final categoryItems = items[categories[selectedIndex]]!;
+    if (searchQuery.isEmpty) return categoryItems;
+
+    return categoryItems.where((item) {
+      return item["name"]!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+          item["type"]!.toLowerCase().contains(searchQuery.toLowerCase());
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +62,16 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
           ),
         ),
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildAppBar(sw, sh),
-              _buildRecommendedSection(sw, sh),
-              _buildCategoriesScroll(sw, sh),
-              Expanded(
-                child: _buildItemsGrid(sw, sh),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildAppBar(sw, sh),
+                _buildRecommendedSection(sw, sh),
+                _buildCategoriesScroll(sw, sh),
+                _buildItemsGrid(sw, sh),
+              ],
+            ),
           ),
         ),
       ),
@@ -77,6 +85,12 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
         children: [
           Expanded(
             child: TextField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -150,12 +164,8 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
         children: [
           Icon(LucideIcons.image, size: sw * 0.12, color: Colors.grey),
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: sw * 0.07,
-            ),
-            child: Divider(
-              thickness: sw * 0.002,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: sw * 0.07),
+            child: Divider(thickness: sw * 0.002),
           ),
           SizedBox(height: sh * 0.002),
           Text(
@@ -217,7 +227,11 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    setState(() => selectedIndex = index);
+                    setState(() {
+                      selectedIndex = index;
+                      searchController.clear();
+                      searchQuery = '';
+                    });
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: sw * 0.03),
@@ -255,18 +269,22 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
   }
 
   Widget _buildItemsGrid(double sw, double sh) {
+    final filteredItems = getFilteredItems();
+    
     return Padding(
       padding: EdgeInsets.all(sw * 0.04),
       child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: sw * 0.03,
           mainAxisSpacing: sh * 0.02,
           childAspectRatio: 3 / 4,
         ),
-        itemCount: items[categories[selectedIndex]]!.length,
+        itemCount: filteredItems.length,
         itemBuilder: (context, index) {
-          final item = items[categories[selectedIndex]]![index];
+          final item = filteredItems[index];
           return _buildItemCard(
               item["name"]!, item["type"]!, item["price"]!, sw, sh);
         },
@@ -297,12 +315,8 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
             color: Colors.grey,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: sw * 0.1,
-            ),
-            child: Divider(
-              thickness: sw * 0.002,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: sw * 0.1),
+            child: Divider(thickness: sw * 0.002),
           ),
           SizedBox(height: sh * 0.002),
           Text(
