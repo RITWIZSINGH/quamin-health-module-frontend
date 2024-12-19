@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:quamin_health_module/diet_module/diet_models/cart_address.dart';
 import '../../../diet_providers/cart_provider.dart';
 import '../../../diet_widgets/diet_cart_widgets/quantity_control.dart';
 
@@ -12,11 +13,42 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  String? selectedAddress;
-  final List<String> addresses = [
-    '123 Main St, Apartment 4B, City - 12345',
-    '456 Park Avenue, House 7, Town - 67890',
+  Address? selectedAddress;
+  final List<Address> addresses = [
+    Address(
+      houseNo: '42B',
+      street: 'Main Street',
+      society: 'Green Valley',
+      locality: 'West Zone',
+      landmark: 'City Park',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      pincode: '400001',
+      phone: '9876543210',
+    ),
+    Address(
+      houseNo: '15A',
+      street: 'Park Road',
+      society: 'Blue Heights',
+      locality: 'East Zone',
+      landmark: 'Central Mall',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      pincode: '400002',
+      phone: '9876543211',
+    ),
   ];
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _houseNoController = TextEditingController();
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _societyController = TextEditingController();
+  final TextEditingController _localityController = TextEditingController();
+  final TextEditingController _landmarkController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _pincodeController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   void initState() {
@@ -26,45 +58,168 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    _houseNoController.dispose();
+    _streetController.dispose();
+    _societyController.dispose();
+    _localityController.dispose();
+    _landmarkController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    _pincodeController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
   void _showAddAddressDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Add New Address'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Full Address',
-                hintText: 'Enter your complete address',
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+        content: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
+                _buildFormField(
+                  controller: _houseNoController,
+                  label: 'House/Flat No.',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter house/flat no.' : null,
                 ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement address saving logic
-                    Navigator.pop(context);
+                _buildFormField(
+                  controller: _streetController,
+                  label: 'Street',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter street' : null,
+                ),
+                _buildFormField(
+                  controller: _societyController,
+                  label: 'Society Name',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter society name' : null,
+                ),
+                _buildFormField(
+                  controller: _localityController,
+                  label: 'Locality',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter locality' : null,
+                ),
+                _buildFormField(
+                  controller: _landmarkController,
+                  label: 'Landmark',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter landmark' : null,
+                ),
+                _buildFormField(
+                  controller: _cityController,
+                  label: 'City',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter city' : null,
+                ),
+                _buildFormField(
+                  controller: _stateController,
+                  label: 'State',
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? 'Please enter state' : null,
+                ),
+                _buildFormField(
+                  controller: _pincodeController,
+                  label: 'Pincode',
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) return 'Please enter pincode';
+                    if (value!.length != 6) return 'Pincode must be 6 digits';
+                    return null;
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff2ed12e),
-                  ),
-                  child: const Text('Save'),
+                ),
+                _buildFormField(
+                  controller: _phoneController,
+                  label: 'Phone Number',
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) return 'Please enter phone number';
+                    if (value!.length != 10) return 'Phone must be 10 digits';
+                    return null;
+                  },
                 ),
               ],
             ),
-          ],
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: _saveAddress,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xff2ed12e),
+            ),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _saveAddress() {
+    if (_formKey.currentState?.validate() ?? false) {
+      final newAddress = Address(
+        houseNo: _houseNoController.text,
+        street: _streetController.text,
+        society: _societyController.text,
+        locality: _localityController.text,
+        landmark: _landmarkController.text,
+        city: _cityController.text,
+        state: _stateController.text,
+        pincode: _pincodeController.text,
+        phone: _phoneController.text,
+      );
+
+      setState(() {
+        addresses.add(newAddress);
+        selectedAddress = newAddress;
+      });
+
+      // Clear form
+      _houseNoController.clear();
+      _streetController.clear();
+      _societyController.clear();
+      _localityController.clear();
+      _landmarkController.clear();
+      _cityController.clear();
+      _stateController.clear();
+      _pincodeController.clear();
+      _phoneController.clear();
+
+      Navigator.pop(context);
+    }
+  }
+
+  Widget _buildFormField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+        ),
+        keyboardType: keyboardType,
+        validator: validator,
       ),
     );
   }
@@ -173,7 +328,7 @@ class _CartScreenState extends State<CartScreen> {
               ],
             ),
             const SizedBox(height: 12),
-            DropdownButtonFormField<String>(
+            DropdownButtonFormField<Address>(
               value: selectedAddress,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -187,10 +342,25 @@ class _CartScreenState extends State<CartScreen> {
               items: addresses.map((address) {
                 return DropdownMenuItem(
                   value: address,
-                  child: Text(
-                    address,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        address.shortAddress,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Phone: ${address.phone}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }).toList(),
@@ -199,12 +369,31 @@ class _CartScreenState extends State<CartScreen> {
                   selectedAddress = value;
                 });
               },
+              selectedItemBuilder: (BuildContext context) {
+                return addresses.map((Address address) {
+                  return Text(
+                    address.shortAddress,
+                    overflow: TextOverflow.ellipsis,
+                  );
+                }).toList();
+              },
             ),
+            if (selectedAddress != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                selectedAddress!.formattedAddress,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
   }
+
 
   Widget _buildCartItemsList(CartProvider cart) {
     return Column(
