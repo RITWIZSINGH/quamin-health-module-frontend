@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:provider/provider.dart';
+import '../../../diet_providers/cart_provider.dart';
+import '../../../diet_widgets/diet_cart_widgets/item_details_sheet.dart';
+import '../../../diet_widgets/diet_cart_widgets/quantity_control.dart';
 
 class OrderItemsTab extends StatefulWidget {
   const OrderItemsTab({super.key});
@@ -79,34 +83,66 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
   }
 
   Widget _buildAppBar(double sw, double sh) {
-    return Padding(
-      padding: EdgeInsets.all(sw * 0.04),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: searchController,
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                });
-              },
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: "Search Products or store",
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(sw * 0.08),
-                  borderSide: BorderSide.none,
+    return Consumer<CartProvider>(
+      builder: (context, cart, child) {
+        return Padding(
+          padding: EdgeInsets.all(sw * 0.04),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Search Products or store",
+                    prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(sw * 0.08),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              SizedBox(width: sw * 0.04),
+              Stack(
+                children: [
+                  const Icon(Icons.shopping_cart, color: Colors.black),
+                  if (cart.itemCount > 0)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${cart.itemCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
-          SizedBox(width: sw * 0.04),
-          const Icon(Icons.shopping_cart, color: Colors.black),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -292,66 +328,86 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
     );
   }
 
-  Widget _buildItemCard(
-      String name, String type, String price, double sw, double sh) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(sw * 0.04),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: sw * 0.02,
-            spreadRadius: sw * 0.01,
+  Widget _buildItemCard(String name, String type, String price, double sw, double sh) {
+    final priceValue = double.parse(price.replaceAll('Rs. ', ''));
+    final id = '$name-$type'; // Create a unique ID for the item
+
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => ItemDetailsSheet(
+            id: id,
+            name: name,
+            type: type,
+            price: priceValue,
+            description: 'Fresh and high-quality $name. $type quality product.',
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            LucideIcons.image,
-            size: sw * 0.2,
-            color: Colors.grey,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: sw * 0.1),
-            child: Divider(thickness: sw * 0.002),
-          ),
-          SizedBox(height: sh * 0.002),
-          Text(
-            name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: sw * 0.045,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(sw * 0.04),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: sw * 0.02,
+              spreadRadius: sw * 0.01,
             ),
-          ),
-          SizedBox(height: sh * 0.005),
-          Text(
-            type,
-            style: TextStyle(
-              fontSize: sw * 0.035,
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              LucideIcons.image,
+              size: sw * 0.2,
               color: Colors.grey,
             ),
-          ),
-          SizedBox(height: sh * 0.01),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                price,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: sw * 0.04,
-                ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: sw * 0.1),
+              child: Divider(thickness: sw * 0.002),
+            ),
+            SizedBox(height: sh * 0.002),
+            Text(
+              name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: sw * 0.045,
               ),
-              Icon(
-                LucideIcons.plusCircle,
-                color: const Color.fromARGB(255, 38, 101, 210),
-              )
-            ],
-          ),
-        ],
+            ),
+            SizedBox(height: sh * 0.005),
+            Text(
+              type,
+              style: TextStyle(
+                fontSize: sw * 0.035,
+                color: Colors.grey,
+              ),
+            ),
+            SizedBox(height: sh * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  price,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: sw * 0.04,
+                  ),
+                ),
+                QuantityControl(
+                  id: id,
+                  name: name,
+                  type: type,
+                  price: priceValue,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
