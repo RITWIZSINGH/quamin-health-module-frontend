@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class OrderItemsTab extends StatefulWidget {
   const OrderItemsTab({super.key});
@@ -56,11 +57,11 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildAppBar(sw,sh),
-              _buildRecommendedSection(sw,sh),
-              _buildCategoriesScroll(sw,sh),
+              _buildAppBar(sw, sh),
+              _buildRecommendedSection(sw, sh),
+              _buildCategoriesScroll(sw, sh),
               Expanded(
-                child: _buildItemsGrid(sw,sh),
+                child: _buildItemsGrid(sw, sh),
               ),
             ],
           ),
@@ -69,7 +70,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
     );
   }
 
-  Widget _buildAppBar(double sw,double sh) {
+  Widget _buildAppBar(double sw, double sh) {
     return Padding(
       padding: EdgeInsets.all(sw * 0.04),
       child: Row(
@@ -95,7 +96,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
     );
   }
 
-  Widget _buildRecommendedSection(double sw,double sh) {
+  Widget _buildRecommendedSection(double sw, double sh) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: sh * 0.02),
       child: Column(
@@ -120,7 +121,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.only(left: sw * 0.04),
-                  child: _buildRecommendedCard(sw,sh),
+                  child: _buildRecommendedCard(sw, sh),
                 );
               },
             ),
@@ -130,7 +131,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
     );
   }
 
-  Widget _buildRecommendedCard(double sw,double sh) {
+  Widget _buildRecommendedCard(double sw, double sh) {
     return Container(
       width: sw * 0.3,
       decoration: BoxDecoration(
@@ -147,8 +148,16 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.image, size: sw * 0.12, color: Colors.grey),
-          SizedBox(height: sh * 0.01),
+          Icon(LucideIcons.image, size: sw * 0.12, color: Colors.grey),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: sw * 0.07,
+            ),
+            child: Divider(
+              thickness: sw * 0.002,
+            ),
+          ),
+          SizedBox(height: sh * 0.002),
           Text(
             "Fresh Lemon",
             style: TextStyle(
@@ -165,19 +174,28 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
             ),
           ),
           SizedBox(height: sh * 0.01),
-          Text(
-            "Rs. 40",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: sw * 0.035,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "Rs. 40",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: sw * 0.035,
+                ),
+              ),
+              Icon(
+                LucideIcons.plusCircle,
+                color: const Color.fromARGB(255, 38, 101, 210),
+              )
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCategoriesScroll(double sw,double sh) {
+  Widget _buildCategoriesScroll(double sw, double sh) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: sw * 0.04),
       child: Column(
@@ -212,7 +230,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
                           ? const Color(0xff2ed12e)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(sw * 0.05),
-                      border: Border.all(color: Colors.grey.shade300),
+                      border: Border.all(color: Colors.grey),
                     ),
                     child: Center(
                       child: Text(
@@ -220,7 +238,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
                         style: TextStyle(
                           color: selectedIndex == index
                               ? Colors.white
-                              : Colors.black,
+                              : Colors.blueGrey.shade600,
                           fontWeight: FontWeight.bold,
                           fontSize: sw * 0.04,
                         ),
@@ -236,7 +254,7 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
     );
   }
 
-  Widget _buildItemsGrid(double sw,double sh) {
+  Widget _buildItemsGrid(double sw, double sh) {
     return Padding(
       padding: EdgeInsets.all(sw * 0.04),
       child: GridView.builder(
@@ -250,17 +268,14 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
         itemBuilder: (context, index) {
           final item = items[categories[selectedIndex]]![index];
           return _buildItemCard(
-            item["name"]!,
-            item["type"]!,
-            item["price"]!,
-            sw,sh
-          );
+              item["name"]!, item["type"]!, item["price"]!, sw, sh);
         },
       ),
     );
   }
 
-  Widget _buildItemCard(String name, String type, String price,double sw,double sh) {
+  Widget _buildItemCard(
+      String name, String type, String price, double sw, double sh) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -276,8 +291,20 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.image, size: sw * 0.1, color: Colors.grey),
-          SizedBox(height: sh * 0.02),
+          Icon(
+            LucideIcons.image,
+            size: sw * 0.2,
+            color: Colors.grey,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: sw * 0.1,
+            ),
+            child: Divider(
+              thickness: sw * 0.002,
+            ),
+          ),
+          SizedBox(height: sh * 0.002),
           Text(
             name,
             style: TextStyle(
@@ -294,12 +321,21 @@ class _OrderItemsTabState extends State<OrderItemsTab> {
             ),
           ),
           SizedBox(height: sh * 0.01),
-          Text(
-            price,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: sw * 0.04,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                price,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: sw * 0.04,
+                ),
+              ),
+              Icon(
+                LucideIcons.plusCircle,
+                color: const Color.fromARGB(255, 38, 101, 210),
+              )
+            ],
           ),
         ],
       ),
