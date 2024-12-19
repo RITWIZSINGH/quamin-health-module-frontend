@@ -86,8 +86,9 @@ class _CartScreenState extends State<CartScreen> {
                 _buildFormField(
                   controller: _houseNoController,
                   label: 'House/Flat No.',
-                  validator: (value) =>
-                      value?.isEmpty ?? true ? 'Please enter house/flat no.' : null,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Please enter house/flat no.'
+                      : null,
                 ),
                 _buildFormField(
                   controller: _streetController,
@@ -98,8 +99,9 @@ class _CartScreenState extends State<CartScreen> {
                 _buildFormField(
                   controller: _societyController,
                   label: 'Society Name',
-                  validator: (value) =>
-                      value?.isEmpty ?? true ? 'Please enter society name' : null,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Please enter society name'
+                      : null,
                 ),
                 _buildFormField(
                   controller: _localityController,
@@ -140,7 +142,8 @@ class _CartScreenState extends State<CartScreen> {
                   label: 'Phone Number',
                   keyboardType: TextInputType.phone,
                   validator: (value) {
-                    if (value?.isEmpty ?? true) return 'Please enter phone number';
+                    if (value?.isEmpty ?? true)
+                      return 'Please enter phone number';
                     if (value!.length != 10) return 'Phone must be 10 digits';
                     return null;
                   },
@@ -338,29 +341,41 @@ class _CartScreenState extends State<CartScreen> {
                   horizontal: 16,
                   vertical: 12,
                 ),
+                // Add this to ensure the input decoration doesn't add extra width
+                isDense: true,
               ),
+              // Add this to prevent overflow
+              isExpanded: true,
               items: addresses.map((address) {
                 return DropdownMenuItem(
                   value: address,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        address.shortAddress,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                  child: Container(
+                    // Constrain the width of dropdown items
+                    constraints: const BoxConstraints(maxWidth: 300),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          address.shortAddress,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          // Add overflow handling for the text
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Text(
-                        'Phone: ${address.phone}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
+                        Text(
+                          'Phone: ${address.phone}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                          // Add overflow handling for the phone number
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
@@ -393,7 +408,6 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-
 
   Widget _buildCartItemsList(CartProvider cart) {
     return Column(
