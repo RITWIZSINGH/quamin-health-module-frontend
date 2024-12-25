@@ -438,17 +438,22 @@ class _OverviewTabState extends State<OverviewTab> {
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
             ),
             TextButton(
-              onPressed: () {},
-              child: Row(
-                children: [
-                  const Text('View more'),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 10,
-                  )
-                ],
-              ),
-            ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            CustomPageRoute(
+                                child: const AllHealthDataScreen()));
+                      },
+                      child: Row(
+                        children: [
+                          const Text('All Data'),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: sw / 30,
+                          )
+                        ],
+                      ),
+                    ),
           ],
         ),
         const SizedBox(height: 12),
