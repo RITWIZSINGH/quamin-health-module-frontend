@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:quamin_health_module/health_module/routes/custom_page_route.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/all_health_data_screen.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/explore_tab.dart';
@@ -37,6 +38,18 @@ class OverviewTab extends StatelessWidget {
   }
 
   Widget _buildHeaderSection(BuildContext context, double sw, double sh) {
+    // Get current date and time
+    final now = DateTime.now();
+
+    // Format the date to get day and date
+    final formatter = DateFormat('E dd MMM');
+    final formattedDate = formatter.format(now);
+
+    // Determine if it's day or night (assuming day is between 6 AM and 6 PM)
+    final hour = now.hour;
+    final isDaytime = hour >= 6 && hour < 18;
+    final timeSymbol = isDaytime ? '☀' : '☾';
+
     return SizedBox(
       width: sw,
       child: Row(
@@ -69,7 +82,7 @@ class OverviewTab extends StatelessWidget {
                 ),
                 SizedBox(height: sh / 100),
                 Text(
-                  '☀ TUES 11 JUL',
+                  '$timeSymbol ${formattedDate.toUpperCase()}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Row(
