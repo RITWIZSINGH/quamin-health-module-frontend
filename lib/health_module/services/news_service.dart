@@ -7,11 +7,12 @@ import 'package:quamin_health_module/health_module/models/news_model.dart';
 class NewsService {
   static const String apiKey = 'a216021b1e7e43f285d153b5a8bd9967';
   static const String baseUrl = 'https://newsapi.org/v2';
+  static const int articlesPerPage = 10;
 
-  Future<List<NewsArticle>> getHealthNews() async {
+  Future<List<NewsArticle>> getHealthNews({int page = 1}) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/everything?q=health&apiKey=$apiKey'),
+        Uri.parse('$baseUrl/everything?q=health&pageSize=$articlesPerPage&page=$page&apiKey=$apiKey'),
       );
 
       if (response.statusCode == 200) {
