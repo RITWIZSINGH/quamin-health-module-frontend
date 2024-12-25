@@ -2,12 +2,49 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quamin_health_module/health_module/models/news_model.dart';
 import 'package:quamin_health_module/health_module/routes/custom_page_route.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/all_health_data_screen.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/explore_tab.dart';
+import 'package:quamin_health_module/health_module/screens/dashboard/tabs/news_detail_screen.dart';
+import 'package:quamin_health_module/health_module/services/news_service.dart';
 
-class OverviewTab extends StatelessWidget {
+class OverviewTab extends StatefulWidget {
   const OverviewTab({super.key});
+
+  @override
+  State<OverviewTab> createState() => _OverviewTabState();
+}
+
+class _OverviewTabState extends State<OverviewTab> {
+  final NewsService _newsService = NewsService();
+  List<NewsArticle> _articles = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNews();
+  }
+
+  Future<void> _loadNews() async {
+    try {
+      final articles = await _newsService.getHealthNews();
+      setState(() {
+        _articles = articles;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load news')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,22 +52,25 @@ class OverviewTab extends StatelessWidget {
     double sh = MediaQuery.of(context).size.height;
 
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(sw / 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeaderSection(context, sw, sh),
-              SizedBox(height: sh / 30),
-              _buildHealthScore(context),
-              SizedBox(height: sh / 30),
-              _buildHighlights(context),
-              SizedBox(height: sh / 30),
-              _buildWeeklyReport(context),
-              SizedBox(height: sh / 30),
-              _buildBlogsSection(context),
-            ],
+      child: RefreshIndicator(
+        onRefresh: _loadNews,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(sw / 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeaderSection(context, sw, sh),
+                SizedBox(height: sh / 30),
+                _buildHealthScore(context),
+                SizedBox(height: sh / 30),
+                _buildHighlights(context),
+                SizedBox(height: sh / 30),
+                _buildWeeklyReport(context),
+                SizedBox(height: sh / 30),
+                _buildBlogsSection(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -130,7 +170,7 @@ class OverviewTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Latest Blogs',
+          'Latest Health News',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
@@ -139,93 +179,136 @@ class OverviewTab extends StatelessWidget {
         SizedBox(height: sh / 50),
         SizedBox(
           height: sh / 3,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5, // Replace with actual number of blogs
-            itemBuilder: (context, index) {
-              return _buildBlogCard(context, sw, sh, index);
-            },
-          ),
+          child: _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _articles.length,
+                  itemBuilder: (context, index) {
+                    return _buildBlogCard(
+                        context, sw, sh, _articles[index]);
+                  },
+                ),
         ),
       ],
     );
   }
 
-  // Blog card widget
-  Widget _buildBlogCard(BuildContext context, double sw, double sh, int index) {
-    return Container(
-      width: sw / 1.4,
-      margin: EdgeInsets.only(right: sw / 30),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 4),
+  Widget _buildBlogCard(
+      BuildContext context, double sw, double sh, NewsArticle article) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewsDetailScreen(article: article),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize:
-            MainAxisSize.min, // Add this to minimize the column's height
-        children: [
-          Container(
-            height: sh / 5.5,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 8, offset: Offset(0, 4))
-              ],
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
+        );
+      },
+      child: Container(
+        width: sw / 1.4,
+        margin: EdgeInsets.only(right: sw / 30),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 4),
             ),
-            child: Center(
-              child: Text(
-                'Blog Image ${index + 1}',
-                style: TextStyle(color: Colors.grey),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: sh / 5.5,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 4))
+                ],
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(sw / 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize:
-                  MainAxisSize.min, // Add this to minimize the column's height
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Blog Title ${index + 1}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                child: article.urlToImage != null
+                    ? Image.network(
+                        article.urlToImage!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey.shade200,
+                            child: Center(
+                              child: Icon(Icons.error_outline),
+                            ),
+                          );
+                        },
+                      )
+                    : Container(
+                        color: Colors.grey.shade200,
+                        child: Center(
+                          child: Icon(Icons.newspaper),
+                        ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('Read More >'),
-                    ),
-                  ],
-                ),
-                SizedBox(height: sh / 180),
-                Text(
-                  'Short description of the blog post goes here...',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.all(sw / 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          article.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NewsDetailScreen(article: article),
+                            ),
+                          );
+                        },
+                        child: Text('Read More >'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: sh / 180),
+                  Text(
+                    article.description,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
