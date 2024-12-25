@@ -18,52 +18,99 @@ class OverviewTab extends StatefulWidget {
 
 class _OverviewTabState extends State<OverviewTab> {
   final NewsService _newsService = NewsService();
+  final ScrollController _scrollController = ScrollController();
   List<NewsArticle> _articles = [];
   bool _isLoading = true;
-  
+  bool _isLoadingMore = false;
+  int _currentPage = 1;
+  bool _hasMoreArticles = true;
+
   String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
     _loadNews();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8 &&
+        !_isLoadingMore &&
+        _hasMoreArticles) {
+      _loadMoreNews();
+    }
+  }
+
+  Future<void> _loadMoreNews() async {
+    if (_isLoadingMore) return;
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    try {
+      final newArticles = await _newsService.getHealthNews(page: _currentPage + 1);
+      
+      if (newArticles.isEmpty) {
+        _hasMoreArticles = false;
+      } else {
+        setState(() {
+          _articles.addAll(newArticles);
+          _currentPage++;
+        });
+      }
+    } catch (e) {
+      print('Error loading more news: $e');
+    } finally {
+      setState(() {
+        _isLoadingMore = false;
+      });
+    }
   }
 
   Future<void> _loadNews() async {
-  if (!mounted) return;
-  
-  setState(() {
-    _isLoading = true;
-    _errorMessage = null;
-  });
-
-  try {
-    final articles = await _newsService.getHealthNews();
-    
     if (!mounted) return;
-    
+
     setState(() {
-      _articles = articles;
-      _isLoading = false;
+      _isLoading = true;
+      _errorMessage = null;
     });
-    
-    // If we got articles but the list is empty
-    if (articles.isEmpty) {
+
+    try {
+      final articles = await _newsService.getHealthNews();
+
+      if (!mounted) return;
+
       setState(() {
-        _errorMessage = 'No news articles available';
+        _articles = articles;
+        _isLoading = false;
+        _currentPage = 1;
+        _hasMoreArticles = articles.length >= NewsService.articlesPerPage;
+      });
+
+      if (articles.isEmpty) {
+        setState(() {
+          _errorMessage = 'No news articles available';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      print('Error loading news: $e');
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Failed to load news';
+        _articles = [];
       });
     }
-  } catch (e) {
-    if (!mounted) return;
-    
-    print('Error loading news: $e');
-    setState(() {
-      _isLoading = false;
-      _errorMessage = 'Failed to load news';
-      _articles = []; // Clear any existing articles
-    });
   }
-}
 
 
   @override
