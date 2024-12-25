@@ -8,6 +8,7 @@ import 'package:quamin_health_module/health_module/screens/dashboard/all_health_
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/explore_tab.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/news_detail_screen.dart';
 import 'package:quamin_health_module/health_module/services/news_service.dart';
+import 'package:quamin_health_module/health_module/widgets/common/news_card.dart';
 
 class OverviewTab extends StatefulWidget {
   const OverviewTab({super.key});
@@ -41,7 +42,8 @@ class _OverviewTabState extends State<OverviewTab> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8 &&
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent * 0.8 &&
         !_isLoadingMore &&
         _hasMoreArticles) {
       _loadMoreNews();
@@ -56,8 +58,9 @@ class _OverviewTabState extends State<OverviewTab> {
     });
 
     try {
-      final newArticles = await _newsService.getHealthNews(page: _currentPage + 1);
-      
+      final newArticles =
+          await _newsService.getHealthNews(page: _currentPage + 1);
+
       if (newArticles.isEmpty) {
         _hasMoreArticles = false;
       } else {
@@ -111,7 +114,6 @@ class _OverviewTabState extends State<OverviewTab> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -229,184 +231,81 @@ class _OverviewTabState extends State<OverviewTab> {
     );
   }
 
- Widget _buildBlogsSection(BuildContext context) {
-  double sw = MediaQuery.of(context).size.width;
-  double sh = MediaQuery.of(context).size.height;
+   Widget _buildBlogsSection(BuildContext context) {
+    double sw = MediaQuery.of(context).size.width;
+    double sh = MediaQuery.of(context).size.height;
+    final cardHeight = sh / 2.8;
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Latest Health News',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-          ),
-          if (!_isLoading)
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: _loadNews,
-            ),
-        ],
-      ),
-      SizedBox(height: sh / 50),
-      SizedBox(
-        height: sh / 3,
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _articles.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          _errorMessage ?? 'No news available',
-                          style: TextStyle(
-                            color: _errorMessage != null ? Colors.red : Colors.grey,
-                          ),
-                        ),
-                        if (_errorMessage != null) ...[
-                          SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed: _loadNews,
-                            child: Text('Retry'),
-                          ),
-                        ],
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _articles.length,
-                    itemBuilder: (context, index) {
-                      return _buildBlogCard(context, sw, sh, _articles[index]);
-                    },
-                  ),
-      ),
-    ],
-  );
-}
-
-  Widget _buildBlogCard(
-      BuildContext context, double sw, double sh, NewsArticle article) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NewsDetailScreen(article: article),
-          ),
-        );
-      },
-      child: Container(
-        width: sw / 1.4,
-        margin: EdgeInsets.only(right: sw / 30),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: sh / 5.5,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4))
-                ],
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                child: article.urlToImage != null
-                    ? Image.network(
-                        article.urlToImage!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey.shade200,
-                            child: Center(
-                              child: Icon(Icons.error_outline),
-                            ),
-                          );
-                        },
-                      )
-                    : Container(
-                        color: Colors.grey.shade200,
-                        child: Center(
-                          child: Icon(Icons.newspaper),
-                        ),
-                      ),
+            Text(
+              'Latest Health News',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(sw / 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          article.title,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NewsDetailScreen(article: article),
-                            ),
-                          );
-                        },
-                        child: Text('Read More >'),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: sh / 180),
-                  Text(
-                    article.description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+            if (!_isLoading)
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: _loadNews,
               ),
-            ),
           ],
         ),
-      ),
+        SizedBox(height: sh / 50),
+        SizedBox(
+          height: cardHeight,
+          child: _isLoading && _articles.isEmpty
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : _articles.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _errorMessage ?? 'No news available',
+                            style: TextStyle(
+                              color: _errorMessage != null ? Colors.red : Colors.grey,
+                            ),
+                          ),
+                          if (_errorMessage != null) ...[
+                            SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: _loadNews,
+                              child: Text('Retry'),
+                            ),
+                          ],
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _articles.length + (_isLoadingMore ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == _articles.length) {
+                          return Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        return NewsCard(
+                          article: _articles[index],
+                          width: sw / 1.4,
+                          height: cardHeight,
+                        );
+                      },
+                    ),
+        ),
+      ],
     );
   }
 
@@ -485,22 +384,20 @@ class _OverviewTabState extends State<OverviewTab> {
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
             ),
             TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            CustomPageRoute(
-                                child: const AllHealthDataScreen()));
-                      },
-                      child: Row(
-                        children: [
-                          const Text('All Data'),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            size: sw / 30,
-                          )
-                        ],
-                      ),
-                    ),
+              onPressed: () {
+                Navigator.push(context,
+                    CustomPageRoute(child: const AllHealthDataScreen()));
+              },
+              child: Row(
+                children: [
+                  const Text('All Data'),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: sw / 30,
+                  )
+                ],
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
