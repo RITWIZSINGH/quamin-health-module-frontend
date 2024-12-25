@@ -21,14 +21,14 @@ class NewsArticle {
 
   factory NewsArticle.fromJson(Map<String, dynamic> json) {
     return NewsArticle(
-      source: Source.fromJson(json['source']),
+      source: Source.fromJson(json['source'] ?? {'name': 'Unknown'}),
       author: json['author'],
-      title: json['title'],
-      description: json['description'],
-      url: json['url'],
+      title: json['title'] ?? 'Untitled',
+      description: json['description'] ?? 'No description available',
+      url: json['url'] ?? '',
       urlToImage: json['urlToImage'],
-      publishedAt: json['publishedAt'],
-      content: json['content'] ?? '',
+      publishedAt: json['publishedAt'] ?? DateTime.now().toIso8601String(),
+      content: json['content'] ?? 'No content available',
     );
   }
 }
@@ -42,7 +42,7 @@ class Source {
   factory Source.fromJson(Map<String, dynamic> json) {
     return Source(
       id: json['id'],
-      name: json['name'],
+      name: json['name'] ?? 'Unknown Source',
     );
   }
 }

@@ -20,6 +20,8 @@ class _OverviewTabState extends State<OverviewTab> {
   final NewsService _newsService = NewsService();
   List<NewsArticle> _articles = [];
   bool _isLoading = true;
+  
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -28,23 +30,41 @@ class _OverviewTabState extends State<OverviewTab> {
   }
 
   Future<void> _loadNews() async {
-    try {
-      final articles = await _newsService.getHealthNews();
+  if (!mounted) return;
+  
+  setState(() {
+    _isLoading = true;
+    _errorMessage = null;
+  });
+
+  try {
+    final articles = await _newsService.getHealthNews();
+    
+    if (!mounted) return;
+    
+    setState(() {
+      _articles = articles;
+      _isLoading = false;
+    });
+    
+    // If we got articles but the list is empty
+    if (articles.isEmpty) {
       setState(() {
-        _articles = articles;
-        _isLoading = false;
+        _errorMessage = 'No news articles available';
       });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load news')),
-        );
-      }
     }
+  } catch (e) {
+    if (!mounted) return;
+    
+    print('Error loading news: $e');
+    setState(() {
+      _isLoading = false;
+      _errorMessage = 'Failed to load news';
+      _articles = []; // Clear any existing articles
+    });
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -162,37 +182,67 @@ class _OverviewTabState extends State<OverviewTab> {
     );
   }
 
-  Widget _buildBlogsSection(BuildContext context) {
-    double sw = MediaQuery.of(context).size.width;
-    double sh = MediaQuery.of(context).size.height;
+ Widget _buildBlogsSection(BuildContext context) {
+  double sw = MediaQuery.of(context).size.width;
+  double sh = MediaQuery.of(context).size.height;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Latest Health News',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
-        ),
-        SizedBox(height: sh / 50),
-        SizedBox(
-          height: sh / 3,
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _articles.length,
-                  itemBuilder: (context, index) {
-                    return _buildBlogCard(
-                        context, sw, sh, _articles[index]);
-                  },
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Latest Health News',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
                 ),
-        ),
-      ],
-    );
-  }
+          ),
+          if (!_isLoading)
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: _loadNews,
+            ),
+        ],
+      ),
+      SizedBox(height: sh / 50),
+      SizedBox(
+        height: sh / 3,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _articles.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _errorMessage ?? 'No news available',
+                          style: TextStyle(
+                            color: _errorMessage != null ? Colors.red : Colors.grey,
+                          ),
+                        ),
+                        if (_errorMessage != null) ...[
+                          SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed: _loadNews,
+                            child: Text('Retry'),
+                          ),
+                        ],
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _articles.length,
+                    itemBuilder: (context, index) {
+                      return _buildBlogCard(context, sw, sh, _articles[index]);
+                    },
+                  ),
+      ),
+    ],
+  );
+}
 
   Widget _buildBlogCard(
       BuildContext context, double sw, double sh, NewsArticle article) {
