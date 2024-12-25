@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
@@ -8,41 +9,53 @@ class NewsService {
   static const String apiKey = 'a216021b1e7e43f285d153b5a8bd9967';
   static const String baseUrl = 'https://newsapi.org/v2';
   static const int articlesPerPage = 10;
+  
+  // Remove static keyword to make cache instance-specific
+  List<NewsArticle> _cachedArticles = [];
+  final Random _random = Random();
 
-  Future<List<NewsArticle>> getHealthNews({int page = 1}) async {
+  Future<List<NewsArticle>> getHealthNews({int page = 1, bool forceRefresh = false}) async {
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/everything?q=health&pageSize=$articlesPerPage&page=$page&apiKey=$apiKey'),
-      );
+      // Always fetch new articles if it's a force refresh or cache is empty
+      if (forceRefresh || _cachedArticles.isEmpty || page > 1) {
+        final response = await http.get(
+          Uri.parse('$baseUrl/everything?q=health&pageSize=$articlesPerPage&page=$page&sortBy=publishedAt&apiKey=$apiKey'),
+        );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        
-        if (data['status'] == 'ok' && data['articles'] != null) {
-          final List<dynamic> articles = data['articles'];
-          final List<NewsArticle> newsArticles = [];
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> data = json.decode(response.body);
           
-          for (var article in articles) {
-            try {
-              NewsArticle newsArticle = NewsArticle.fromJson(article);
-              // Fetch full content for each article
-              if (newsArticle.url.isNotEmpty) {
-                String? fullContent = await _fetchFullContent(newsArticle.url);
-                if (fullContent != null && fullContent.isNotEmpty) {
-                  newsArticle = newsArticle.copyWith(content: fullContent);
+          if (data['status'] == 'ok' && data['articles'] != null) {
+            final List<dynamic> articles = data['articles'];
+            final List<NewsArticle> newsArticles = [];
+            
+            for (var article in articles) {
+              try {
+                NewsArticle newsArticle = NewsArticle.fromJson(article);
+                if (newsArticle.url.isNotEmpty) {
+                  String? fullContent = await _fetchFullContent(newsArticle.url);
+                  if (fullContent != null && fullContent.isNotEmpty) {
+                    newsArticle = newsArticle.copyWith(content: fullContent);
+                  }
                 }
+                newsArticles.add(newsArticle);
+              } catch (e) {
+                print('Error processing article: $e');
               }
-              newsArticles.add(newsArticle);
-            } catch (e) {
-              print('Error processing article: $e');
             }
+
+            // Update cache for first page only
+            if (page == 1) {
+              _cachedArticles = newsArticles;
+            }
+
+            return newsArticles;
           }
-          return newsArticles;
-        } else {
-          throw Exception('Invalid data format');
         }
-      } else {
         throw Exception('Failed to load news: ${response.statusCode}');
+      } else {
+        // Return cached articles for non-force refreshes of first page
+        return _cachedArticles;
       }
     } catch (e) {
       print('Error in getHealthNews: $e');
@@ -62,10 +75,8 @@ class NewsService {
       if (response.statusCode == 200) {
         var document = parse(response.body);
         
-        // Remove unwanted elements
         _removeUnwantedElements(document);
         
-        // Try different potential content selectors
         final List<String> contentSelectors = [
           'article',
           '.article-content',
@@ -90,14 +101,12 @@ class NewsService {
           }
         }
 
-        // Fallback: Try to find the longest paragraph container
         var paragraphContainers = document.querySelectorAll('div').where((element) {
           var paragraphs = element.querySelectorAll('p');
-          return paragraphs.length > 2; // Container must have at least 3 paragraphs
+          return paragraphs.length > 2;
         }).toList();
 
         if (paragraphContainers.isNotEmpty) {
-          // Sort by number of paragraphs
           paragraphContainers.sort((a, b) => 
             b.querySelectorAll('p').length.compareTo(a.querySelectorAll('p').length)
           );
@@ -134,20 +143,17 @@ class NewsService {
   }
 
   String _cleanContent(Element element) {
-    // Remove nested unwanted elements
     element.querySelectorAll('script, style, iframe, form').forEach((e) => e.remove());
 
-    // Get all text nodes and paragraphs
     var content = element
         .querySelectorAll('p, h1, h2, h3, h4, h5, h6')
         .map((e) => e.text.trim())
         .where((text) => text.isNotEmpty)
         .join('\n\n');
 
-    // Clean up the content
     content = content
-        .replaceAll(RegExp(r'\s+'), ' ')  // Replace multiple spaces with single space
-        .replaceAll(RegExp(r'\n\s*\n'), '\n\n')  // Replace multiple newlines with double newline
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(RegExp(r'\n\s*\n'), '\n\n')
         .trim();
 
     return content;

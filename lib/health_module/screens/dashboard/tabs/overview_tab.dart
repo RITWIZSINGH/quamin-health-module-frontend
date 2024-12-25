@@ -58,20 +58,28 @@ class _OverviewTabState extends State<OverviewTab> {
     });
 
     try {
-      final newArticles =
-          await _newsService.getHealthNews(page: _currentPage + 1);
+      final newArticles = await _newsService.getHealthNews(
+        page: _currentPage + 1,
+        forceRefresh: true,
+      );
+
+      if (!mounted) return;
 
       if (newArticles.isEmpty) {
-        _hasMoreArticles = false;
+        setState(() {
+          _hasMoreArticles = false;
+          _isLoadingMore = false;
+        });
       } else {
         setState(() {
           _articles.addAll(newArticles);
           _currentPage++;
+          _isLoadingMore = false;
         });
       }
     } catch (e) {
+      if (!mounted) return;
       print('Error loading more news: $e');
-    } finally {
       setState(() {
         _isLoadingMore = false;
       });
@@ -87,7 +95,10 @@ class _OverviewTabState extends State<OverviewTab> {
     });
 
     try {
-      final articles = await _newsService.getHealthNews();
+      final articles = await _newsService.getHealthNews(
+        page: 1,
+        forceRefresh: true,
+      );
 
       if (!mounted) return;
 
@@ -231,7 +242,7 @@ class _OverviewTabState extends State<OverviewTab> {
     );
   }
 
-   Widget _buildBlogsSection(BuildContext context) {
+  Widget _buildBlogsSection(BuildContext context) {
     double sw = MediaQuery.of(context).size.width;
     double sh = MediaQuery.of(context).size.height;
     final cardHeight = sh / 2.8;
@@ -245,14 +256,14 @@ class _OverviewTabState extends State<OverviewTab> {
             Text(
               'Latest Health News',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
             ),
             // if (!_isLoading)
             //   IconButton(
             //     icon: Icon(Icons.refresh),
-            //     onPressed: _loadMoreNews,
+            //     onPressed: _loadNews,
             //   ),
           ],
         ),
@@ -271,7 +282,9 @@ class _OverviewTabState extends State<OverviewTab> {
                           Text(
                             _errorMessage ?? 'No news available',
                             style: TextStyle(
-                              color: _errorMessage != null ? Colors.red : Colors.grey,
+                              color: _errorMessage != null
+                                  ? Colors.red
+                                  : Colors.grey,
                             ),
                           ),
                           if (_errorMessage != null) ...[
@@ -545,7 +558,6 @@ class _OverviewTabState extends State<OverviewTab> {
           ],
         ),
         const SizedBox(height: 12),
-        //Weekly report grid
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -646,26 +658,28 @@ class _OverviewTabState extends State<OverviewTab> {
     );
   }
 
-  //As cycle highligh card has more text , its card is made seperate
-  _buildCycleHighlightCard(BuildContext context,
-      {required double padding,
-      required IconData icon,
-      required String title,
-      required String value,
-      required String subtitle,
-      required Color color}) {
+  Widget _buildCycleHighlightCard(
+    BuildContext context, {
+    required double padding,
+    required IconData icon,
+    required String title,
+    required String value,
+    required String subtitle,
+    required Color color,
+  }) {
     return Container(
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black45,
-              blurRadius: 10,
-              offset: Offset(0, 6),
-            )
-          ]),
+        color: color,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black45,
+            blurRadius: 10,
+            offset: Offset(0, 6),
+          )
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
