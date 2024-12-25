@@ -31,6 +31,21 @@ class NewsArticle {
       content: json['content'] ?? 'No content available',
     );
   }
+
+  NewsArticle copyWith({
+    String? content,
+  }) {
+    return NewsArticle(
+      source: source,
+      author: author,
+      title: title,
+      description: description,
+      url: url,
+      urlToImage: urlToImage,
+      publishedAt: publishedAt,
+      content: content ?? this.content,
+    );
+  }
 }
 
 class Source {

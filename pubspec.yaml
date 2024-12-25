@@ -47,6 +47,7 @@ dependencies:
   lucide_icons: ^0.257.0
   http: ^1.2.2
   intl: ^0.17.0
+  html: ^0.15.5
   
 
 dev_dependencies:

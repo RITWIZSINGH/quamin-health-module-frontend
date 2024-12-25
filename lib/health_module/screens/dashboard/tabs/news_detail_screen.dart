@@ -49,17 +49,23 @@ class NewsDetailScreen extends StatelessWidget {
                     children: [
                       Icon(Icons.source_outlined, size: 16),
                       SizedBox(width: 4),
-                      Text(
-                        article.source.name,
-                        style: TextStyle(color: Colors.grey),
+                      Expanded(
+                        child: Text(
+                          article.source.name,
+                          style: TextStyle(color: Colors.grey),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       if (article.author != null) ...[
                         SizedBox(width: 16),
                         Icon(Icons.person_outline, size: 16),
                         SizedBox(width: 4),
-                        Text(
-                          article.author!,
-                          style: TextStyle(color: Colors.grey),
+                        Expanded(
+                          child: Text(
+                            article.author!,
+                            style: TextStyle(color: Colors.grey),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ],
@@ -69,10 +75,12 @@ class NewsDetailScreen extends StatelessWidget {
                     article.description,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  SizedBox(height: 16),
-                  Text(
+                  SizedBox(height: 24),
+                  SelectableText(
                     article.content,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      height: 1.6,
+                    ),
                   ),
                   SizedBox(height: 16),
                   Text(
