@@ -19,7 +19,8 @@ class NewsDetailScreen extends StatelessWidget {
             floating: false,
             pinned: true,
             elevation: 0,
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor:
+                Theme.of(context).primaryColor.withValues(alpha: 0.8),
             leading: IconButton(
               icon: Container(
                 padding: EdgeInsets.all(8),

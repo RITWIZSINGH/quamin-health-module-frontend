@@ -249,11 +249,11 @@ class _OverviewTabState extends State<OverviewTab> {
                 fontSize: 22,
               ),
             ),
-            if (!_isLoading)
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: _loadNews,
-              ),
+            // if (!_isLoading)
+            //   IconButton(
+            //     icon: Icon(Icons.refresh),
+            //     onPressed: _loadMoreNews,
+            //   ),
           ],
         ),
         SizedBox(height: sh / 50),
