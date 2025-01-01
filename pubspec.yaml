@@ -48,6 +48,9 @@ dependencies:
   http: ^1.2.2
   intl: ^0.17.0
   html: ^0.15.5
+  pedometer: ^4.0.2
+  permission_handler: ^11.3.1
+  shared_preferences: ^2.3.4
   
 
 dev_dependencies:
