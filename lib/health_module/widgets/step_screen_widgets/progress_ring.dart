@@ -5,6 +5,8 @@ import 'dart:math' as math;
 
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../services/step_tracking_service.dart';
+
 class ProgressRing extends StatelessWidget {
   final double progress;
   final int steps;
@@ -19,38 +21,47 @@ class ProgressRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      width: 200,
-      child: CustomPaint(
-        painter: ProgressRingPainter(progress: progress),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                LucideIcons.footprints,
-                color: Color(0xff636ae8),
-                size: 26,
+    return StreamBuilder<int>(
+      stream: StepTrackingService().stepStream,
+      builder: (context, snapshot) {
+        final currentSteps = snapshot.data ?? 0;
+        final currentProgress =
+            currentSteps / StepTrackingService().currentGoal;
+
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.25,
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: CustomPaint(
+            painter: ProgressRingPainter(progress: currentProgress),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    LucideIcons.footprints,
+                    color: Color(0xff636ae8),
+                    size: 26,
+                  ),
+                  Text(
+                    currentSteps.toString(),
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Steps out of ${StepTrackingService().currentGoal ~/ 1000}k',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                steps.toString(),
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Steps out of ${goal}k',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

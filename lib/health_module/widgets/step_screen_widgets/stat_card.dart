@@ -1,92 +1,105 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:flutter/material.dart';
+import '../../services/step_tracking_service.dart';
 
 class StatCard extends StatelessWidget {
-  final String value;
-  final String unit;
-  final Color color;
-  final double progress;
+  final String type;
   final IconData icon;
+  final Color color;
 
   const StatCard({
     super.key,
-    required this.value,
-    required this.unit,
-    required this.color,
-    required this.progress,
+    required this.type,
     required this.icon,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 2.0),
-      child: Container(
-        width: 100,
-        height: 150,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.1),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            SizedBox.expand(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 28.0),
+    return StreamBuilder<int>(
+      stream: StepTrackingService().stepStream,
+      builder: (context, snapshot) {
+        final steps = snapshot.data ?? 0;
+        final service = StepTrackingService();
+        
+        String value = '';
+        String unit = '';
+        double progress = 0.0;
+
+        switch (type) {
+          case 'calories':
+            final calories = service.calculateCalories();
+            value = calories.toStringAsFixed(0);
+            unit = 'kcal';
+            progress = calories / 1000; // Assuming 1000 kcal is the goal
+            break;
+          case 'distance':
+            final miles = service.calculateMiles();
+            value = miles.toStringAsFixed(1);
+            unit = 'km';
+            progress = miles / 10; // Assuming 10km is the goal
+            break;
+          case 'duration':
+            final duration = service.calculateDuration();
+            value = duration.toStringAsFixed(0);
+            unit = 'min';
+            progress = duration / 180; // Assuming 180 min is the goal
+            break;
+        }
+
+        return Container(
+          width: MediaQuery.of(context).size.width * 0.28,
+          height: MediaQuery.of(context).size.height * 0.2,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              SizedBox.expand(
                 child: CustomPaint(
                   painter: CircularProgressPainter(
                     progress: progress,
-                    color: color.withValues(alpha: 0.3),
+                    color: color,
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 25.0),
-              child: Center(
-                child: Icon(
-                  icon,
-                  size: 24,
-                  color: color,
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, color: color, size: 24),
+                    const SizedBox(height: 8),
+                    Text(
+                      value,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      unit,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 2,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    unit,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

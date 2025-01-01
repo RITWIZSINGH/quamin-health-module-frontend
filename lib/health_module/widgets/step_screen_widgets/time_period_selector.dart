@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 class TimePeriodSelector extends StatefulWidget {
-  const TimePeriodSelector({super.key});
+  final String selectedPeriod;
+  final Function(String) onPeriodChanged;
+
+  const TimePeriodSelector({
+    super.key,
+    required this.selectedPeriod,
+    required this.onPeriodChanged,
+  });
 
   @override
   State<TimePeriodSelector> createState() => _TimePeriodSelectorState();
 }
 
 class _TimePeriodSelectorState extends State<TimePeriodSelector> {
-  int selectedIndex = 0;
   final periods = ['Today', 'Weekly', 'Monthly'];
 
   @override
@@ -16,7 +22,7 @@ class _TimePeriodSelectorState extends State<TimePeriodSelector> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Color(0xff636ae8),
+        color: const Color(0xff636ae8),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Row(
@@ -24,22 +30,24 @@ class _TimePeriodSelectorState extends State<TimePeriodSelector> {
         children: List.generate(
           periods.length,
           (index) => GestureDetector(
-            onTap: () => setState(() => selectedIndex = index),
+            onTap: () => widget.onPeriodChanged(periods[index]),
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 8,
               ),
               decoration: BoxDecoration(
-                color:
-                    selectedIndex == index ? Colors.white : Colors.transparent,
+                color: widget.selectedPeriod == periods[index] 
+                    ? Colors.white 
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 periods[index],
                 style: TextStyle(
-                  color:
-                      selectedIndex == index ? Color(0xff636ae8) : Colors.white,
+                  color: widget.selectedPeriod == periods[index] 
+                      ? const Color(0xff636ae8) 
+                      : Colors.white,
                   fontWeight: FontWeight.w900,
                 ),
               ),
