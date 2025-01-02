@@ -1,6 +1,8 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:quamin_health_module/health_module/models/news_model.dart';
@@ -205,10 +207,25 @@ void initState() {
                         ),
                       ),
                     ),
-                    CircleAvatar(
-                      radius: sw / 20,
-                      backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100&h=100',
+                    IconButton(
+                      onPressed: () async {
+                        try {
+                          await FirebaseAuth.instance.signOut();
+                          if (context.mounted) {
+                            context.go('/signin'); // Using go_router for navigation
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to logout: $e')),
+                            );
+                          }
+                        }
+                      },
+                      icon: Icon(
+                        Icons.logout_rounded,
+                        size: sw / 20,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
