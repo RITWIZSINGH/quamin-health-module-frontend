@@ -74,7 +74,7 @@ class ProgressRingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = math.min(size.width / 2, size.height / 2) - 10;
+    final radius = math.min(size.width / 2, size.height / 2) - 5;
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 18.0

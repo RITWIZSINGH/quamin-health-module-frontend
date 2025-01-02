@@ -2,12 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:quamin_health_module/health_module/models/news_model.dart';
 import 'package:quamin_health_module/health_module/routes/custom_page_route.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/all_health_data_screen.dart';
+import 'package:quamin_health_module/health_module/screens/dashboard/highlightscreens/steps_screen.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/explore_tab.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/news_detail_screen.dart';
 import 'package:quamin_health_module/health_module/services/news_service.dart';
+import 'package:quamin_health_module/health_module/services/step_service.dart';
 import 'package:quamin_health_module/health_module/widgets/common/news_card.dart';
 
 class OverviewTab extends StatefulWidget {
@@ -25,21 +28,31 @@ class _OverviewTabState extends State<OverviewTab> {
   bool _isLoadingMore = false;
   int _currentPage = 1;
   bool _hasMoreArticles = true;
+  final StepService _stepService = StepService();
 
   String? _errorMessage;
 
   @override
-  void initState() {
-    super.initState();
-    _loadNews();
-    _scrollController.addListener(_onScroll);
-  }
+void initState() {
+  super.initState();
+  _loadNews();
+  _scrollController.addListener(_onScroll);
+  _initializeStepService();
+}
 
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
+
+  Future<void> _initializeStepService() async {
+  try {
+    await _stepService.initialize();
+  } catch (e) {
+    print('Error initializing step service: $e');
+  }
+}
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
@@ -464,67 +477,167 @@ class _OverviewTabState extends State<OverviewTab> {
     );
   }
 
-  Widget _buildHighlightCard(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String value,
-    required String subtitle,
-    required Color color,
-    required double padding,
-  }) {
-    return Container(
-      padding: EdgeInsets.all(padding),
-      decoration: BoxDecoration(
-        color: color,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black45,
-            blurRadius: 10,
-            offset: Offset(0, 6),
-          )
-        ],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                icon,
-                color: Colors.white,
-                size: 50,
-              ),
-            ],
-          ),
-          const Spacer(),
-          Text(
-            title,
-            style: const TextStyle(
-                fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 10,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+ Widget _buildHighlightCard(
+  BuildContext context, {
+  required IconData icon,
+  required String title,
+  required String value,
+  required String subtitle,
+  required Color color,
+  required double padding,
+}) {
+  if (title == 'Steps') {
+    return StreamBuilder<StepCount>(
+      stream: _stepService.stepCountStream,
+      builder: (context, snapshot) {
+        return _buildStepCard(
+          context,
+          steps: snapshot.hasData ? snapshot.data!.steps.toString() : value,
+          icon: icon,
+          subtitle: subtitle,
+          color: color,
+          padding: padding,
+        );
+      },
     );
   }
+
+  return _buildRegularCard(
+    context,
+    icon: icon,
+    title: title,
+    value: value,
+    subtitle: subtitle,
+    color: color,
+    padding: padding,
+  );
+}
+
+Widget _buildStepCard(
+  BuildContext context, {
+  required String steps,
+  required IconData icon,
+  required String subtitle,
+  required Color color,
+  required double padding,
+}) {
+  return GestureDetector(
+    onTap: () {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Current Steps'),
+          content: Text('$steps steps'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    },
+    onLongPress: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const StepsScreen(),
+        ),
+      );
+    },
+    child: _buildCardContent(
+      icon: icon,
+      title: 'Steps',
+      value: steps,
+      subtitle: subtitle,
+      color: color,
+      padding: padding,
+    ),
+  );
+}
+
+Widget _buildRegularCard(
+  BuildContext context, {
+  required IconData icon,
+  required String title,
+  required String value,
+  required String subtitle,
+  required Color color,
+  required double padding,
+}) {
+  return _buildCardContent(
+    icon: icon,
+    title: title,
+    value: value,
+    subtitle: subtitle,
+    color: color,
+    padding: padding,
+  );
+}
+
+Widget _buildCardContent({
+  required IconData icon,
+  required String title,
+  required String value,
+  required String subtitle,
+  required Color color,
+  required double padding,
+}) {
+  return Container(
+    padding: EdgeInsets.all(padding),
+    decoration: BoxDecoration(
+      color: color,
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.black45,
+          blurRadius: 10,
+          offset: Offset(0, 6),
+        )
+      ],
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 50,
+            ),
+          ],
+        ),
+        const Spacer(),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 24,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          subtitle,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 10,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildWeeklyReport(BuildContext context) {
     double sw = MediaQuery.of(context).size.width;

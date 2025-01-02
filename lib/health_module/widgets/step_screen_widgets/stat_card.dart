@@ -22,7 +22,7 @@ class StatCard extends StatelessWidget {
       builder: (context, snapshot) {
         final steps = snapshot.data ?? 0;
         final service = StepTrackingService();
-        
+
         String value = '';
         String unit = '';
         double progress = 0.0;
@@ -56,7 +56,7 @@ class StatCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 spreadRadius: 1,
                 blurRadius: 5,
                 offset: const Offset(0, 2),
@@ -73,28 +73,39 @@ class StatCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, color: color, size: 24),
-                    const SizedBox(height: 8),
-                    Text(
-                      value,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(icon, color: color, size: 24),
+                        const SizedBox(height: 8),
+                        Text(
+                          value,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0, top: 0),
+                    child: Text(
                       unit,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -113,7 +124,7 @@ class CircularProgressPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = math.min(size.width / 2, size.height / 2) - 10;
+    final radius = math.min(size.width / 2, size.height / 2) - 8;
     final strokeWidth = 8.0;
 
     // Background ring (full circle with low opacity)
