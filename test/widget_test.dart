@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:quamin_health_module/main.dart';
 import 'package:quamin_health_module/router.dart';
-import 'package:quamin_health_module/startscreens/services/auth_notifier.dart';
+import 'package:quamin_health_module/start_module/start_services/auth_notifier.dart';
 
 void main() {
   final authNotifier = AuthNotifier();

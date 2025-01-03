@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'widgets/option_card.dart';
-import 'utils/app_colors.dart';
-import 'utils/app_styles.dart';
+import 'choose_module_widgets/option_card.dart';
+import 'choose_module_utils/app_colors.dart';
+import 'choose_module_utils/app_styles.dart';
 
 class ChooseOptionsScreen extends StatelessWidget {
   const ChooseOptionsScreen({Key? key}) : super(key: key);

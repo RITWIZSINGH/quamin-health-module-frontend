@@ -5,7 +5,7 @@ import 'package:quamin_health_module/diet_module/diet_screens/tabs/generate_diet
 import 'tabs/order_items_tab/order_items_tab.dart';
 import 'tabs/track_order_tab.dart';
 import 'tabs/generate_dietplan/diet_quesstionaire_tab.dart';
-import '/health_module/widgets/common/animated_page.dart';
+import '../../health_module/health_widgets/common/animated_page.dart';
 
 class DietDashboardScreen extends StatefulWidget {
   const DietDashboardScreen({super.key});

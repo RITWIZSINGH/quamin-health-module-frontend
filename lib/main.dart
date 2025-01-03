@@ -7,8 +7,8 @@ import 'package:quamin_health_module/diet_module/diet_providers/cart_provider.da
 import 'package:quamin_health_module/firebase_options.dart';
 import 'package:quamin_health_module/router.dart';
 import 'package:quamin_health_module/health_module/theme/app_theme.dart';
-import 'package:quamin_health_module/startscreens/services/auth_notifier.dart';
-import 'health_module/providers/meal_provider.dart';
+import 'package:quamin_health_module/start_module/start_services/auth_notifier.dart';
+import 'health_module/health_providers/meal_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {

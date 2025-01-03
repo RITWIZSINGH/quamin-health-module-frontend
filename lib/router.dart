@@ -2,11 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:quamin_health_module/choose_module/choose_options_screen.dart';
 import 'package:quamin_health_module/diet_module/diet_screens/diet_dasboard_screen.dart';
-import 'package:quamin_health_module/health_module/screens/dashboard/health_dashboard_screen.dart';
-import 'package:quamin_health_module/startscreens/launch_screen.dart';
-import 'package:quamin_health_module/startscreens/services/auth_notifier.dart';
-import 'package:quamin_health_module/startscreens/signin_screen.dart';
-import 'package:quamin_health_module/startscreens/signup_screen.dart';
+import 'package:quamin_health_module/health_module/health_screens/dashboard/health_dashboard_screen.dart';
+import 'package:quamin_health_module/start_module/launch_screen.dart';
+import 'package:quamin_health_module/start_module/start_services/auth_notifier.dart';
+import 'package:quamin_health_module/start_module/signin_screen.dart';
+import 'package:quamin_health_module/start_module/signup_screen.dart';
 
 import 'package:flutter/material.dart';
 
