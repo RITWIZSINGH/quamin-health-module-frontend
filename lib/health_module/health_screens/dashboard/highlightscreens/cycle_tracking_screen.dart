@@ -27,7 +27,7 @@ class CycleTrackingScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children:  [
               CalendarStrip(),
               SizedBox(height: 24),
               PeriodCircle(),
