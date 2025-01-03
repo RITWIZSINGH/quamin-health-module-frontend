@@ -24,4 +24,10 @@ class Meal {
     carbs: json['carbs'] as double,
     timestamp: DateTime.parse(json['timestamp'] as String),
   );
+
+  // Alias for toJson to match the provider's usage
+  Map<String, dynamic> toMap() => toJson();
+
+  // Alias for fromJson to match the provider's usage
+  factory Meal.fromMap(Map<String, dynamic> map) => Meal.fromJson(map);
 }

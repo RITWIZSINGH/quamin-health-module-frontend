@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quamin_health_module/health_module/health_providers/nutrition_provider.dart';
-import '../health_models/daily_nutrition.dart';
+import '../../health_models/daily_nutrition.dart';
 
 class NutritionService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
