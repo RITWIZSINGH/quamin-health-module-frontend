@@ -5,7 +5,7 @@ import 'dart:math' as math;
 
 import 'package:lucide_icons/lucide_icons.dart';
 
-import '../../services/step_tracking_service.dart';
+import '../../services/step_services/step_tracking_service.dart';
 
 class ProgressRing extends StatelessWidget {
   final double progress;

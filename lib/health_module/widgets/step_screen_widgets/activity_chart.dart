@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../services/step_tracking_service.dart';
+import '../../services/step_services/step_tracking_service.dart';
 import '../../models/step_data.dart';
 
 class ActivityChart extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../services/step_tracking_service.dart';
+import '../../services/step_services/step_tracking_service.dart';
 
 class StatCard extends StatelessWidget {
   final String type;

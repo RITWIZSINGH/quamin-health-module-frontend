@@ -12,7 +12,7 @@ import 'package:quamin_health_module/health_module/screens/dashboard/highlightsc
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/explore_tab.dart';
 import 'package:quamin_health_module/health_module/screens/dashboard/tabs/news_detail_screen.dart';
 import 'package:quamin_health_module/health_module/services/news_service.dart';
-import 'package:quamin_health_module/health_module/services/step_service.dart';
+import 'package:quamin_health_module/health_module/services/step_services/step_service.dart';
 import 'package:quamin_health_module/health_module/widgets/common/news_card.dart';
 
 class OverviewTab extends StatefulWidget {

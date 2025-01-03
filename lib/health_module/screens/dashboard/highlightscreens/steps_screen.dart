@@ -4,7 +4,7 @@ import '../../../widgets/step_screen_widgets/progress_ring.dart';
 import '../../../widgets/step_screen_widgets/stat_card.dart';
 import '../../../widgets/step_screen_widgets/activity_chart.dart';
 import '../../../widgets/step_screen_widgets/time_period_selector.dart';
-import '../../../services/step_tracking_service.dart';
+import '../../../services/step_services/step_tracking_service.dart';
 
 class StepsScreen extends StatefulWidget {
   const StepsScreen({super.key});
