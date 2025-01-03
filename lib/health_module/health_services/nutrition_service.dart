@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quamin_health_module/health_module/health_providers/nutrition_provider.dart';
-import '../health_models/nutrition_target.dart';
 import '../health_models/daily_nutrition.dart';
 
 class NutritionService {
@@ -31,7 +30,7 @@ class NutritionService {
     await saveDailyNutrition(dailyNutrition);
     
     // Reset values
-    provider.reset();
+    provider.resetDaily();
   }
 
   Stream<DateTime> getDayEndStream() {

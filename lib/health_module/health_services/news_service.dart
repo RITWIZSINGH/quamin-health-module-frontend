@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
@@ -24,7 +23,6 @@ class NewsService {
   
   // Remove static keyword to make cache instance-specific
   List<NewsArticle> _cachedArticles = [];
-  final Random _random = Random();
 
   Future<List<NewsArticle>> getHealthNews({int page = 1, bool forceRefresh = false}) async {
     try {

@@ -17,7 +17,7 @@ class AllHealthDataScreen extends StatefulWidget {
 class _AllHealthDataScreenState extends State<AllHealthDataScreen> {
   final StepTrackingService _stepTrackingService = StepTrackingService();
   late Stream<int> _stepStream;
-  
+
   @override
   void initState() {
     super.initState();
@@ -53,10 +53,8 @@ class _AllHealthDataScreenState extends State<AllHealthDataScreen> {
           padding: EdgeInsets.only(left: sw / 9),
           child: const Text(
             'All Health Data',
-            style: TextStyle(
-              color: Colors.black87, 
-              fontWeight: FontWeight.bold
-            ),
+            style:
+                TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
           ),
         ),
         leading: IconButton(
@@ -125,8 +123,9 @@ class _AllHealthDataScreenState extends State<AllHealthDataScreen> {
           HealthDataItem(
             icon: Icons.local_fire_department,
             color: Colors.teal,
-            title: 'Burned calories',
-            value: '850 kcal',
+            title: 'Nutrition',
+            value: 'Daily calories burned',
+            isNutrition: true,
             onTap: () => Navigator.push(
               context,
               CustomPageRoute(child: const NutritionScreen()),

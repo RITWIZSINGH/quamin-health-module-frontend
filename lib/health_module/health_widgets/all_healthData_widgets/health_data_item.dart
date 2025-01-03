@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../health_providers/nutrition_provider.dart';
 
 class HealthDataItem extends StatelessWidget {
   final IconData icon;
@@ -6,6 +8,7 @@ class HealthDataItem extends StatelessWidget {
   final String title;
   final String value;
   final VoidCallback onTap;
+  final bool isNutrition;
 
   const HealthDataItem({
     super.key,
@@ -14,6 +17,7 @@ class HealthDataItem extends StatelessWidget {
     required this.title,
     required this.value,
     required this.onTap,
+    this.isNutrition = false,
   });
 
   @override
@@ -25,19 +29,43 @@ class HealthDataItem extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
+            color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: color),
         ),
         title: Text(title),
-        subtitle: Text(
-          value,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
+        subtitle: isNutrition
+            ? Consumer<NutritionProvider>(
+                builder: (context, provider, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${provider.totalCalories.toStringAsFixed(0)} / ${provider.target.calorieTarget.toStringAsFixed(0)} kcal',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        value,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              )
+            : Text(
+                value,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
         trailing: const Icon(Icons.chevron_right),
       ),
     );
