@@ -37,14 +37,14 @@ class StatCard extends StatelessWidget {
           case 'distance':
             final miles = service.calculateMiles();
             value = miles.toStringAsFixed(1);
-            unit = 'km';
-            progress = miles / 10; // Assuming 10km is the goal
+            unit = 'miles';
+            progress = miles / 5; // Assuming 10km is the goal
             break;
           case 'duration':
             final duration = service.calculateDuration();
             value = duration.toStringAsFixed(0);
             unit = 'min';
-            progress = duration / 180; // Assuming 180 min is the goal
+            progress = duration / 60; // Assuming 180 min is the goal
             break;
         }
 

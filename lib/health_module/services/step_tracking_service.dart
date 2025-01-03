@@ -73,11 +73,11 @@ class StepTrackingService {
   Future<void> _handleDayEnd() async {
     // Store steps in Firestore
     await _storeStepsInFirestore();
-    
+
     // Reset steps
     _steps = 0;
     _stepController.add(_steps);
-    
+
     // Update last reset date
     _lastResetDate = DateTime.now();
     await _saveLastResetDate();
@@ -86,8 +86,9 @@ class StepTrackingService {
   Future<void> _storeStepsInFirestore() async {
     try {
       final date = DateTime.now();
-      final dateStr = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-      
+      final dateStr =
+          "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+
       await _firestore.collection('steps').doc(dateStr).set({
         'date': dateStr,
         'steps': _steps,
@@ -146,7 +147,7 @@ class StepTrackingService {
             now.year != _lastResetDate.year) {
           _handleDayEnd();
         }
-        
+
         _steps = event.steps;
         _stepController.add(_steps);
       },
@@ -166,11 +167,11 @@ class StepTrackingService {
   }
 
   double calculateDuration() {
-    return (_steps * 1 / 1000);
+    return (_steps * 6 / 1000);
   }
 
   double calculateCalories() {
-    return (_steps * 0.0566);
+    return (_steps * 0.045);
   }
 
   void dispose() {
