@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StepTrackingService {
   static final StepTrackingService _instance = StepTrackingService._internal();
@@ -19,6 +20,9 @@ class StepTrackingService {
   int _steps = 0;
   String _status = 'unknown';
   int _goal = 10000; // Default goal
+  DateTime _lastResetDate = DateTime.now();
+  Timer? _midnightTimer;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   int get currentSteps => _steps;
   String get currentStatus => _status;
@@ -31,7 +35,74 @@ class StepTrackingService {
     }
 
     await _loadGoal();
+    await _loadLastResetDate();
     _initPedometer();
+    _setupMidnightReset();
+  }
+
+  Future<void> _loadLastResetDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? dateStr = prefs.getString('last_reset_date');
+    if (dateStr != null) {
+      _lastResetDate = DateTime.parse(dateStr);
+    }
+  }
+
+  Future<void> _saveLastResetDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('last_reset_date', _lastResetDate.toIso8601String());
+  }
+
+  void _setupMidnightReset() {
+    // Cancel existing timer if any
+    _midnightTimer?.cancel();
+
+    // Calculate time until next midnight
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final timeUntilMidnight = tomorrow.difference(now);
+
+    // Set timer for midnight
+    _midnightTimer = Timer(timeUntilMidnight, () {
+      _handleDayEnd();
+      // Setup next day's timer
+      _setupMidnightReset();
+    });
+  }
+
+  Future<void> _handleDayEnd() async {
+    // Store steps in Firestore
+    await _storeStepsInFirestore();
+    
+    // Reset steps
+    _steps = 0;
+    _stepController.add(_steps);
+    
+    // Update last reset date
+    _lastResetDate = DateTime.now();
+    await _saveLastResetDate();
+  }
+
+  Future<void> _storeStepsInFirestore() async {
+    try {
+      final date = DateTime.now();
+      final dateStr = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+      
+      await _firestore.collection('steps').doc(dateStr).set({
+        'date': dateStr,
+        'steps': _steps,
+        'goal': _goal,
+        'goalAchieved': _steps >= _goal,
+        'timestamp': FieldValue.serverTimestamp(),
+        'metrics': {
+          'miles': calculateMiles(),
+          'duration': calculateDuration(),
+          'calories': calculateCalories(),
+        }
+      });
+    } catch (e) {
+      print('Error storing steps in Firestore: $e');
+    }
   }
 
   Future<void> _loadGoal() async {
@@ -68,6 +139,14 @@ class StepTrackingService {
 
     _stepCountStream.listen(
       (StepCount event) {
+        // Check if we need to reset steps (in case app was not running at midnight)
+        final now = DateTime.now();
+        if (now.day != _lastResetDate.day ||
+            now.month != _lastResetDate.month ||
+            now.year != _lastResetDate.year) {
+          _handleDayEnd();
+        }
+        
         _steps = event.steps;
         _stepController.add(_steps);
       },
@@ -95,6 +174,7 @@ class StepTrackingService {
   }
 
   void dispose() {
+    _midnightTimer?.cancel();
     _stepController.close();
     _statusController.close();
   }
