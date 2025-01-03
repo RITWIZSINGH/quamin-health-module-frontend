@@ -24,9 +24,18 @@ class StepTrackingService {
   Timer? _midnightTimer;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Track metrics separately
+  double _calories = 0;
+  double _miles = 0;
+  double _duration = 0;
+
+  // Getters for current values
   int get currentSteps => _steps;
   String get currentStatus => _status;
   int get currentGoal => _goal;
+  double get currentCalories => _calories;
+  double get currentMiles => _miles;
+  double get currentDuration => _duration;
 
   Future<void> initialize() async {
     bool granted = await _checkActivityRecognitionPermission();
@@ -70,13 +79,20 @@ class StepTrackingService {
     });
   }
 
+  void _resetAllMetrics() {
+    _steps = 0;
+    _calories = 0;
+    _miles = 0;
+    _duration = 0;
+    _stepController.add(_steps);
+  }
+
   Future<void> _handleDayEnd() async {
-    // Store steps in Firestore
+    // Store steps in Firestore before resetting
     await _storeStepsInFirestore();
 
-    // Reset steps
-    _steps = 0;
-    _stepController.add(_steps);
+    // Reset all metrics
+    _resetAllMetrics();
 
     // Update last reset date
     _lastResetDate = DateTime.now();
@@ -96,9 +112,9 @@ class StepTrackingService {
         'goalAchieved': _steps >= _goal,
         'timestamp': FieldValue.serverTimestamp(),
         'metrics': {
-          'miles': calculateMiles(),
-          'duration': calculateDuration(),
-          'calories': calculateCalories(),
+          'miles': _miles,
+          'duration': _duration,
+          'calories': _calories,
         }
       });
     } catch (e) {
@@ -149,13 +165,19 @@ class StepTrackingService {
         }
 
         _steps = event.steps;
+        _updateMetrics(); // Update all metrics when steps change
         _stepController.add(_steps);
       },
       onError: (error) {
-        _steps = 0;
-        _stepController.add(_steps);
+        _resetAllMetrics();
       },
     );
+  }
+
+  void _updateMetrics() {
+    _miles = calculateMiles();
+    _duration = calculateDuration();
+    _calories = calculateCalories();
   }
 
   double calculateProgress() {
