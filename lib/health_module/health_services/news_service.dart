@@ -4,7 +4,19 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 import 'package:quamin_health_module/health_module/health_models/news_model.dart';
-
+extension ArticleValidation on Map<String, dynamic> {
+  bool isValidArticle() {
+    return this['title'] != null && 
+           this['title'] != '[Removed]' &&
+           this['description'] != null &&
+           this['description'] != '[Removed]' &&
+           this['content'] != null &&
+           this['content'] != '[Removed]' &&
+           this['url'] != null &&
+           this['url'] != 'https://removed.com' &&
+           this['urlToImage'] != null;
+  }
+}
 class NewsService {
   static const String apiKey = 'a216021b1e7e43f285d153b5a8bd9967';
   static const String baseUrl = 'https://newsapi.org/v2';
@@ -16,10 +28,10 @@ class NewsService {
 
   Future<List<NewsArticle>> getHealthNews({int page = 1, bool forceRefresh = false}) async {
     try {
-      // Always fetch new articles if it's a force refresh or cache is empty
       if (forceRefresh || _cachedArticles.isEmpty || page > 1) {
         final response = await http.get(
-          Uri.parse('$baseUrl/everything?q=health&pageSize=$articlesPerPage&page=$page&sortBy=publishedAt&apiKey=$apiKey'),
+          Uri.parse('$baseUrl/everything?q=health&pageSize=${articlesPerPage * 2}&page=$page&sortBy=publishedAt&apiKey=$apiKey'),
+          // Fetch more articles than needed to account for filtered ones
         );
 
         if (response.statusCode == 200) {
@@ -30,21 +42,27 @@ class NewsService {
             final List<NewsArticle> newsArticles = [];
             
             for (var article in articles) {
-              try {
-                NewsArticle newsArticle = NewsArticle.fromJson(article);
-                if (newsArticle.url.isNotEmpty) {
-                  String? fullContent = await _fetchFullContent(newsArticle.url);
-                  if (fullContent != null && fullContent.isNotEmpty) {
-                    newsArticle = newsArticle.copyWith(content: fullContent);
+              if (article is Map<String, dynamic> && article.isValidArticle()) {
+                try {
+                  NewsArticle newsArticle = NewsArticle.fromJson(article);
+                  if (newsArticle.url.isNotEmpty) {
+                    String? fullContent = await _fetchFullContent(newsArticle.url);
+                    if (fullContent != null && fullContent.isNotEmpty) {
+                      newsArticle = newsArticle.copyWith(content: fullContent);
+                    }
                   }
+                  newsArticles.add(newsArticle);
+                  
+                  // Break if we have enough valid articles
+                  if (newsArticles.length >= articlesPerPage) {
+                    break;
+                  }
+                } catch (e) {
+                  print('Error processing article: $e');
                 }
-                newsArticles.add(newsArticle);
-              } catch (e) {
-                print('Error processing article: $e');
               }
             }
 
-            // Update cache for first page only
             if (page == 1) {
               _cachedArticles = newsArticles;
             }
@@ -54,7 +72,6 @@ class NewsService {
         }
         throw Exception('Failed to load news: ${response.statusCode}');
       } else {
-        // Return cached articles for non-force refreshes of first page
         return _cachedArticles;
       }
     } catch (e) {
@@ -62,7 +79,6 @@ class NewsService {
       rethrow;
     }
   }
-
   Future<String?> _fetchFullContent(String url) async {
     try {
       final response = await http.get(
