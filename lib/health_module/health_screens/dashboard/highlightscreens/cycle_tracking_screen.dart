@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../health_widgets/cycle_tracking_widgets/calendar_strip.dart';
 import '../../../health_widgets/cycle_tracking_widgets/period_circle.dart';
 import '../../../health_widgets/cycle_tracking_widgets/feeling_section.dart';
-import '../../../health_widgets/cycle_tracking_widgets/health_articles.dart';
+import '../../../health_widgets/cycle_tracking_widgets/menstrual_health_articles.dart';
 
 class CycleTrackingScreen extends StatelessWidget {
   const CycleTrackingScreen({super.key});
