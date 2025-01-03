@@ -3,7 +3,6 @@ import 'package:quamin_health_module/health_module/health_models/cycle_tracking_
 import 'package:quamin_health_module/health_module/health_models/cycle_tracking_models/symptoms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class PeriodService {
   static const String _periodDataKey = 'period_data';
   
