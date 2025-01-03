@@ -1,44 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../health_providers/nutrition_provider.dart';
 import 'dart:math';
 
 class NutritionChart extends StatelessWidget {
-  final double fatPercentage;
-  final double proteinPercentage;
-  final double carbsPercentage;
-
-  const NutritionChart({
-    super.key,
-    required this.fatPercentage,
-    required this.proteinPercentage,
-    required this.carbsPercentage,
-  });
+  const NutritionChart({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final nutritionProvider = Provider.of<NutritionProvider>(context);
+    
     return SizedBox(
-      height: 200, // Increased height to accommodate more space
+      height: 200,
       child: CustomPaint(
         painter: NutritionRingPainter(
-          fatPercentage: fatPercentage,
-          proteinPercentage: proteinPercentage,
-          carbsPercentage: carbsPercentage,
+          fatPercentage: nutritionProvider.fatPercentage,
+          proteinPercentage: nutritionProvider.proteinPercentage,
+          carbsPercentage: nutritionProvider.carbsPercentage,
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // SizedBox(height: 10), // Added space above the text
               Text(
-                '60%',
-                style: TextStyle(
+                '${(nutritionProvider.caloriePercentage * 100).toStringAsFixed(0)}%',
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'of 1300 kcal',
-                style: TextStyle(
+                'of ${nutritionProvider.target.calorieTarget.toStringAsFixed(0)} kcal',
+                style: const TextStyle(
                   color: Colors.black54,
                   fontSize: 16,
                 ),
