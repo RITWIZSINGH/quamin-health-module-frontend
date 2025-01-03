@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../../../../health_widgets/nutrition_screen_widgets/calorie_summary.dart';
-import '../../../../health_widgets/nutrition_screen_widgets/nutrition_chart.dart';
-import '../../../../health_widgets/nutrition_screen_widgets/macros_breakdown.dart';
-import '../../../../health_widgets/common/primary_button.dart';
+import 'package:quamin_health_module/health_module/health_providers/nutrition_provider.dart';
+import 'package:quamin_health_module/health_module/health_widgets/common/primary_button.dart';
+import 'package:quamin_health_module/health_module/health_widgets/nutrition_screen_widgets/calorie_summary.dart';
+import 'package:quamin_health_module/health_module/health_widgets/nutrition_screen_widgets/macros_breakdown.dart';
+import 'package:quamin_health_module/health_module/health_widgets/nutrition_screen_widgets/nutrition_chart.dart';
 import 'add_meal_screen.dart';
+import 'set_target_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:quamin_health_module/health_module/health_providers/meal_provider.dart';
 
 class NutritionScreen extends StatelessWidget {
   const NutritionScreen({super.key});
@@ -23,9 +24,22 @@ class NutritionScreen extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.settings, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SetTargetScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: Consumer<MealProvider>(
-        builder: (context, mealProvider, child) {
+      body: Consumer<NutritionProvider>(
+        builder: (context, nutritionProvider, child) {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -34,20 +48,16 @@ class NutritionScreen extends StatelessWidget {
                 children: [
                   const CalorieSummary(),
                   const SizedBox(height: 24),
-                  NutritionChart(
-                    fatPercentage: mealProvider.fatPercentage,
-                    proteinPercentage: mealProvider.proteinPercentage,
-                    carbsPercentage: mealProvider.carbsPercentage,
-                  ),
+                  const NutritionChart(),
                   const SizedBox(height: 24),
                   MacrosBreakdown(
-                    fatPercentage: mealProvider.fatPercentage,
-                    proteinPercentage: mealProvider.proteinPercentage,
-                    carbsPercentage: mealProvider.carbsPercentage,
+                    fatPercentage: nutritionProvider.fatPercentage,
+                    proteinPercentage: nutritionProvider.proteinPercentage,
+                    carbsPercentage: nutritionProvider.carbsPercentage,
                   ),
                   const SizedBox(height: 24),
                   PrimaryButton(
-                    text: 'Add meals',
+                    text: 'Add Meal',
                     icon: LucideIcons.soup,
                     onPressed: () {
                       Navigator.push(
